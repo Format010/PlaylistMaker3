@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/back_search"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/yp_white"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/search"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textColor="?attr/colorPrimaryVariant"
+        android:textFontWeight="500"
+        android:textSize="@dimen/text"
+        app:icon="@drawable/back"
+        app:iconPadding="@dimen/set_size20"
+        app:iconTint="?attr/colorPrimaryVariant"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/input_search"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/search"
+            android:drawablePadding="10dp"
+            android:drawableTint="?attr/colorOnPrimarySurface"
+            android:hint="@string/search"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:focusableInTouchMode="true"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/set_size25"
+            android:textColor="@color/black"
+            android:textColorHint="?attr/colorOnPrimarySurface" />
+
+        <ImageButton
+            android:id="@+id/clear_text"
+            android:layout_width="@dimen/set_size20"
+            android:layout_height="@dimen/set_size20"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/set_size25"
+            android:visibility="gone"
+            app:srcCompat="@drawable/clear" />
+    </FrameLayout>
+
+</LinearLayout>
