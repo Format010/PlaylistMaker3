@@ -14,7 +14,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/set_size24"
         android:gravity="center_vertical"
         android:text="@string/app_name"
         style="@style/MainTextStyle"

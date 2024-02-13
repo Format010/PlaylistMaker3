@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text">22sp</dimen>
-    <dimen name="radius">15dp</dimen>
+    <dimen name="radius16">16dp</dimen>
     <dimen name="marginBottom">16dp</dimen>
     <dimen name="buttonBackXY">0dp</dimen>
     <dimen name="buttonBack">48dp</dimen>
     <dimen name="set_size20">20dp</dimen>
-    <dimen name="set_size25">25dp</dimen>
+    <dimen name="set_size26">26dp</dimen>
     <dimen name="set_size30">30dp</dimen>
-    <dimen name="set_size61">61dp</dimen>
-    <dimen name="set_textSize">16sp</dimen>
+    <dimen name="set_size62">62dp</dimen>
+    <dimen name="set_textSize16">16sp</dimen>
     <dimen name="set_padding16">16dp</dimen>
     <dimen name="set_padding18">18dp</dimen>
+    <dimen name="set_size24">24dp</dimen>
 
 </resources>

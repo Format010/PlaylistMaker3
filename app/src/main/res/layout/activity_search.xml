@@ -42,7 +42,7 @@
             android:inputType="text"
             android:focusableInTouchMode="true"
             android:maxLines="1"
-            android:paddingLeft="@dimen/set_size25"
+            android:paddingLeft="@dimen/set_size24"
             android:textColor="@color/black"
             android:textColorHint="?attr/colorOnPrimarySurface" />
 
@@ -51,9 +51,10 @@
             android:layout_width="@dimen/set_size20"
             android:layout_height="@dimen/set_size20"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/set_size25"
+            android:layout_marginEnd="@dimen/set_size24"
             android:visibility="gone"
-            app:srcCompat="@drawable/clear" />
+            android:background="@color/yp_ligth_grey"
+            app:srcCompat="@drawable/clear_button" />
     </FrameLayout>
 
 </LinearLayout>

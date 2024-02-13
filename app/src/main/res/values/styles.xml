@@ -15,21 +15,21 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:textSize">@dimen/text</item>
-        <item name="cornerRadius">@dimen/radius</item>
+        <item name="cornerRadius">@dimen/radius16</item>
         <item name="iconGravity">textStart</item>
         <item name="iconTint">@color/yp_black</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
     <style name="ButtonStyleSettings" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/set_size61</item>
+        <item name="android:layout_height">@dimen/set_size62</item>
         <item name="android:backgroundTint">?attr/colorSecondary</item>
         <item name="android:paddingLeft">@dimen/set_padding16</item>
         <item name="android:paddingRight">@dimen/set_padding18</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
-        <item name="android:textSize">@dimen/set_textSize</item>
+        <item name="android:textSize">@dimen/set_textSize16</item>
         <item name="iconGravity">end</item>
         <item name="android:iconPreview">@dimen/set_size20</item>
         <item name="iconTint">?attr/colorOnSecondary</item>

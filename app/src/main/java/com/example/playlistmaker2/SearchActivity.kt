@@ -9,8 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 
 class SearchActivity : AppCompatActivity() {
+
+    private var textValue: String = TEXT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
+                invisibleButton(clearButton, s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -54,22 +57,18 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(simpleTextWatcher)
     }
 
-    private var textValue: String = TEXT
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EDITED_TEXT, textValue)
     }
 
-    companion object {
-        const val EDITED_TEXT = "KEY"
-        const val TEXT = " "
+    private fun invisibleButton(view: View, s: CharSequence?){
+        view.isVisible = !s.isNullOrEmpty()
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
+    private companion object {
+        const val EDITED_TEXT = "KEY"
+        const val TEXT = " "
     }
 }

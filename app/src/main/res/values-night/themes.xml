@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/yp_black</item>
         <item name="colorPrimaryVariant">@color/yp_white</item>
         <item name="colorOnPrimary">@color/yp_blue</item>
+        <item name="colorButtonNormal">@color/yp_black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/yp_black</item>
         <item name="colorSecondaryVariant">@color/yp_black</item>
