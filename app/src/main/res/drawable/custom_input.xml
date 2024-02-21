@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+    <shape>
+        <padding android:left="16dp" android:right="16dp" android:bottom="8dp" android:top="8dp"/>
+    </shape>
+</item>
+    <item android:state_enabled="true" android:state_focused="true" >
+        <shape android:shape="rectangle">
+            <solid android:color="@color/yp_ligth_grey" />
+            <corners android:radius="8dp"/>
+
+        </shape>
+    </item>
+
+    <item android:state_enabled="true" >
+        <shape android:shape="rectangle"  >
+            <solid android:color="@color/yp_ligth_grey"/>
+            <corners android:radius="@dimen/set_padding16"/>
+            <stroke android:color="@color/yp_grey" android:width="0dp"/>
+        </shape>
+    </item>
+</layer-list>
