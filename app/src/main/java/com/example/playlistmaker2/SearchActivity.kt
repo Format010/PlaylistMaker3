@@ -83,7 +83,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                invisibleButton(clearButton, s)
+            clearButton.isVisible = !s.isNullOrEmpty()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -99,10 +99,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EDITED_TEXT, textValue)
-    }
-
-    private fun invisibleButton(view: View, s: CharSequence?) {
-        view.isVisible = !s.isNullOrEmpty()
     }
 
     private companion object {
