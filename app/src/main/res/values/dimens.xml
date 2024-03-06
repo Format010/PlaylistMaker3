@@ -4,14 +4,27 @@
     <dimen name="radius16">16dp</dimen>
     <dimen name="marginBottom">16dp</dimen>
     <dimen name="buttonBackXY">0dp</dimen>
+    <dimen name="layout_width_0">0dp</dimen>
     <dimen name="buttonBack">48dp</dimen>
     <dimen name="set_size20">20dp</dimen>
     <dimen name="set_size26">26dp</dimen>
     <dimen name="set_size30">30dp</dimen>
     <dimen name="set_size62">62dp</dimen>
     <dimen name="set_textSize16">16sp</dimen>
+    <dimen name="set_textSize11">11sp</dimen>
     <dimen name="set_padding16">16dp</dimen>
     <dimen name="set_padding18">18dp</dimen>
     <dimen name="set_size24">24dp</dimen>
+    <dimen name="set_marginSearchLists13">13dp</dimen>
+    <dimen name="set_marginSearchLists14">14dp</dimen>
+    <dimen name="set_searchItem_img45">45dp</dimen>
+    <dimen name="set_searchItem_8dp">8dp</dimen>
+    <dimen name="main_height_56">56dp</dimen>
+    <dimen name="media_text_34">34sp</dimen>
+    <dimen name="search_height_52">52dp</dimen>
+    <dimen name="set_padding_10">10dp</dimen>
+    <dimen name="set_padding_6">6dp</dimen>
+    <dimen name="set_padding_4">4dp</dimen>
+    <dimen name="set_padding_12">12dp</dimen>
 
 </resources>

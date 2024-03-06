@@ -11,14 +11,13 @@
         android:id="@+id/back_search"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/main_height_56"
         android:backgroundTint="@color/yp_white"
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/search"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textColor="?attr/colorPrimaryVariant"
-        android:textFontWeight="500"
         android:textSize="@dimen/text"
         app:icon="@drawable/back"
         app:iconPadding="@dimen/set_size20"
@@ -32,10 +31,10 @@
         <EditText
             android:id="@+id/input_search"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="@dimen/search_height_52"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/search"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/set_padding_10"
             android:drawableTint="?attr/colorOnPrimarySurface"
             android:hint="@string/search"
             android:imeOptions="actionDone"
@@ -57,4 +56,12 @@
             app:srcCompat="@drawable/clear_button" />
     </FrameLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/set_padding16"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginLeft="@dimen/set_marginSearchLists13"
+        android:layout_marginRight="@dimen/set_marginSearchLists13"/>
 </LinearLayout>

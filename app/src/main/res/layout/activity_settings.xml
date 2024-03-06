@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/back"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/main_height_56"
         android:backgroundTint="@color/yp_white"
         android:text="@string/settings"
         android:textAlignment="viewStart"
@@ -23,15 +23,13 @@
         app:iconTint="?attr/colorPrimaryVariant"
         app:layout_constraintTop_toTopOf="parent"
         android:fontFamily="@font/ys_display_medium"
-        android:textFontWeight="500"
         style="?android:attr/borderlessButtonStyle"/>
 
     <Switch
         android:id="@+id/switch1"
         style="@style/ButtonStyleSettings"
         android:layout_marginTop="@dimen/set_size24"
-        android:drawableTint="#EAEAEA"
-        android:paddingRight="6dp"
+        android:paddingRight="@dimen/set_padding_6"
         android:text="@string/darkTheme"
         android:thumbTint="?attr/colorOnPrimary"
         android:trackTint="@color/yp_grey"
@@ -57,6 +55,5 @@
         app:icon="@drawable/forward"
         app:layout_constraintTop_toBottomOf="@+id/buttonMailToSupport"
         style="@style/ButtonStyleSettings"/>
-
 
 </LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/set_searchItem_8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/artwork"
+        android:layout_width="@dimen/set_searchItem_img45"
+        android:layout_height="@dimen/set_searchItem_img45"
+        android:layout_margin="@dimen/set_searchItem_8dp"
+        android:src="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/track_name"
+        android:layout_width="@dimen/layout_width_0"
+        android:layout_height="@dimen/set_size20"
+        android:layout_marginStart="@dimen/set_searchItem_8dp"
+        android:layout_marginTop="@dimen/set_marginSearchLists14"
+        android:singleLine="true"
+        android:text="text"
+        android:textColor="?attr/colorPrimaryVariant"
+        android:textSize="@dimen/set_textSize16"
+        app:layout_constraintEnd_toStartOf="@+id/right_icon_item"
+        app:layout_constraintStart_toEndOf="@+id/artwork"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/set_marginSearchLists13"
+        android:layout_marginStart="@dimen/set_searchItem_8dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="text"
+        android:maxLength="40"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="@dimen/set_textSize11"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toEndOf="@+id/artwork"
+        app:layout_constraintTop_toBottomOf="@+id/track_name" />
+
+    <ImageView
+        android:id="@+id/icon_item"
+        android:layout_width="@dimen/set_marginSearchLists13"
+        android:layout_height="@dimen/set_marginSearchLists13"
+        android:paddingTop="@dimen/set_padding_4"
+        android:scaleType="centerInside"
+        android:src="@drawable/point"
+        app:layout_constraintStart_toEndOf="@+id/artist_name"
+        app:layout_constraintTop_toBottomOf="@+id/track_name" />
+
+    <TextView
+        android:id="@+id/track_time"
+        android:layout_width="@dimen/layout_width_0"
+        android:layout_height="@dimen/set_marginSearchLists13"
+        android:text="1:23"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="@dimen/set_textSize11"
+        app:layout_constraintStart_toEndOf="@+id/icon_item"
+        app:layout_constraintTop_toBottomOf="@+id/track_name" />
+
+    <ImageView
+        android:id="@+id/right_icon_item"
+        android:layout_width="@dimen/set_size24"
+        android:layout_height="@dimen/set_size24"
+        android:layout_marginTop="@dimen/set_padding18"
+        android:layout_marginEnd="@dimen/set_padding_12"
+        android:scaleType="centerInside"
+        android:src="@drawable/forward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
