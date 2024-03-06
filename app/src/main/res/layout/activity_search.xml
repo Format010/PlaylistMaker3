@@ -55,6 +55,7 @@
             android:background="@color/yp_ligth_grey"
             app:srcCompat="@drawable/clear_button" />
     </FrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
