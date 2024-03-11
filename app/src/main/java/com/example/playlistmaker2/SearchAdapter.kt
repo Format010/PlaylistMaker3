@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import layout.SearchHolder
 
 class SearchAdapter(
-    private val data: List<Track>
+    val data: List<Track>
 ): RecyclerView.Adapter<SearchHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
@@ -21,4 +21,5 @@ class SearchAdapter(
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
         holder.bind(data[position])
     }
+
 }

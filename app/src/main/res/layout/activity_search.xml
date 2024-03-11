@@ -43,7 +43,8 @@
             android:maxLines="1"
             android:paddingLeft="@dimen/set_size24"
             android:textColor="@color/black"
-            android:textColorHint="?attr/colorOnPrimarySurface" />
+            android:textColorHint="?attr/colorOnPrimarySurface"
+            android:singleLine="true"/>
 
         <ImageButton
             android:id="@+id/clear_text"
@@ -63,4 +64,69 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginLeft="@dimen/set_marginSearchLists13"
         android:layout_marginRight="@dimen/set_marginSearchLists13"/>
+
+    <LinearLayout
+        android:id="@+id/placeholder_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/set_padding_102"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/not_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/set_padding16"
+            android:text="@string/not_search"
+            android:textColor="?attr/colorPrimaryVariant"
+            android:textSize="@dimen/set_textSize19" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/placeholder_message2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/set_padding_102"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/not_connect" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/set_padding16"
+            android:text="@string/not_connect"
+            android:textColor="?attr/colorPrimaryVariant"
+            android:textSize="@dimen/set_textSize19" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/set_size20"
+            android:text="@string/not_connect_2_line"
+            android:textAlignment="center"
+            android:textColor="?attr/colorPrimaryVariant"
+            android:textSize="@dimen/set_textSize19" />
+
+        <Button
+            android:id="@+id/update"
+            android:layout_marginTop="@dimen/set_size20"
+            style="@style/ButtonStyle"
+            android:text="@string/update"
+            />
+
+
+    </LinearLayout>
+
 </LinearLayout>
