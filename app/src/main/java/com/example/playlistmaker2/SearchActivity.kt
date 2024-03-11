@@ -158,10 +158,7 @@ class SearchActivity : AppCompatActivity() {
                 if (text.isNotEmpty()) {
                     listSong.clear()
                     placeholderMessage.visibility = View.VISIBLE
-                    if (additionalMessage.isNotEmpty()) {
-                        Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                            .show()
-                    }
+
                 }
             }
 
@@ -169,10 +166,7 @@ class SearchActivity : AppCompatActivity() {
                 if (text.isNotEmpty()) {
                     listSong.clear()
                     placeholderMessage2.visibility = View.VISIBLE
-                    if (additionalMessage.isNotEmpty()) {
-                        Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                            .show()
-                    }
+
                 }
             }
         }
