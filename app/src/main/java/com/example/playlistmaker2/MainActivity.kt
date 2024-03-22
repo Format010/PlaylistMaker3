@@ -4,10 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker2.MediaActivity
-import com.example.playlistmaker2.R
-import com.example.playlistmaker2.SearchActivity
-import com.example.playlistmaker2.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,52 +4,37 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
 
+    private lateinit var placeholderMessage: ViewGroup
+    private lateinit var placeholderMessage2: ViewGroup
+    private lateinit var inputEditText: EditText
     private var textValue: String = TEXT
-    val listTrack = SearchAdapter(
-        listOf(
-            Track(
-                "Smells Like Teen Spirit",
-                "Nirvana",
-                "5:01",
-                "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                "Billie Jean",
-                "Michael Jackson",
-                "4:35",
-                "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-            ),
-            Track(
-                "Stayin' Alive",
-                "Bee Gees",
-                "4:10",
-                "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                "Whole Lotta Love",
-                "Led Zeppelin",
-                "5:33",
-                "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-            ),
-            Track(
-                "Sweet Child O'Mine",
-                "Guns N' Roses",
-                "5:03",
-                "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-            )
-        )
-    )
+    private val appleItunesBaseUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(appleItunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val appleItunesApi = retrofit.create(AppleItunesApi::class.java)
+    val listSong = ArrayList<Track>()
+    val songAdapter = SearchAdapter(listSong)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +42,13 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         val back = findViewById<Button>(R.id.back_search)
-        val inputEditText = findViewById<EditText>(R.id.input_search)
+        inputEditText = findViewById<EditText>(R.id.input_search)
         val clearButton = findViewById<ImageView>(R.id.clear_text)
+        val update = findViewById<Button>(R.id.update)
+        placeholderMessage = findViewById(R.id.placeholder_message)
+        placeholderMessage2 = findViewById(R.id.placeholder_message2)
+
+
 
         if (savedInstanceState != null) {
             textValue = savedInstanceState.getString(EDITED_TEXT, TEXT)
@@ -76,7 +66,31 @@ class SearchActivity : AppCompatActivity() {
                 val inputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
+                listSong.clear()
+                songAdapter.notifyDataSetChanged()
             }
+        }
+
+        update.setOnClickListener {
+            searchMusicFun()
+            if (placeholderMessage2.visibility == View.VISIBLE) {
+                placeholderMessage2.visibility = View.GONE
+            }
+
+        }
+
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (placeholderMessage2.visibility == View.VISIBLE) {
+                    placeholderMessage2.visibility = View.GONE
+                }
+                if (placeholderMessage.visibility == View.VISIBLE) {
+                    placeholderMessage.visibility = View.GONE
+                }
+                listSong.clear()
+                searchMusicFun()
+            }
+            false
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -84,9 +98,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
             clearButton.isVisible = !s.isNullOrEmpty()
-
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -96,7 +108,8 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
         val rvSearch = findViewById<RecyclerView>(R.id.searchRecyclerView)
-        rvSearch.adapter = listTrack
+        rvSearch.adapter = songAdapter
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -109,5 +122,55 @@ class SearchActivity : AppCompatActivity() {
         const val TEXT = " "
     }
 
-}
+    fun searchMusicFun() {
+        if (inputEditText.text.isNotEmpty()) {
+            appleItunesApi.searchSong(inputEditText.text.toString())
+                .enqueue(object : Callback<MusicResponse> {
+                    override fun onResponse(
+                        call: Call<MusicResponse>,
+                        response: Response<MusicResponse>
+                    ) {
+                        if (response.code() == 200) {
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                listSong.addAll(response.body()?.results!!)
+                                songAdapter.notifyDataSetChanged()
+                            }
+                            if (listSong.isEmpty()) {
+                                showMessage("Ничего не нашлось", "")
+                            } else {
+                                showMessage("", "")
+                            }
+                        } else {
+                            showMessage("Проблемы со связью", response.code().toString())
+                        }
+                    }
 
+                    override fun onFailure(call: Call<MusicResponse>, t: Throwable) {
+                        showMessage("Проблемы со связью", t.message.toString())
+                    }
+                })
+        }
+    }
+
+    fun showMessage(text: String, additionalMessage: String) {
+        when (text) {
+            "Ничего не нашлось" -> {
+                if (text.isNotEmpty()) {
+                    listSong.clear()
+                    placeholderMessage.visibility = View.VISIBLE
+
+                }
+            }
+
+            "Проблемы со связью" -> {
+                if (text.isNotEmpty()) {
+                    listSong.clear()
+                    placeholderMessage2.visibility = View.VISIBLE
+
+                }
+            }
+        }
+    }
+
+
+}

@@ -8,6 +8,8 @@ import com.example.playlistmaker2.R
 import com.example.playlistmaker2.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class SearchHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -17,6 +19,7 @@ class SearchHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
 
     fun bind(track: Track){
+
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .transform(RoundedCorners(10))
@@ -24,7 +27,7 @@ class SearchHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             .into(artwork)
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = track.trackTime
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
     }
 
 }
