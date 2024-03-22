@@ -17,6 +17,7 @@ class SearchHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
+    val searchItemConstraint: View = itemView.findViewById(R.id.search_item)
 
     fun bind(track: Track){
 
@@ -27,7 +28,11 @@ class SearchHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             .into(artwork)
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
+        if (track.trackTimeMillis != null) {
+            trackTime.text = SimpleDateFormat(
+                "mm:ss",
+                Locale.getDefault()
+            ).format(track.trackTimeMillis.toLong())
+        }else trackTime.text = "0:00"
     }
-
 }

@@ -130,4 +130,49 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/history_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/set_size24"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/set_padding18"
+            android:layout_marginBottom="@dimen/set_padding_12"
+            android:text="@string/looking_history"
+            android:textColor="?attr/colorPrimaryVariant"
+            android:textSize="@dimen/set_textSize19" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/set_padding16"
+            android:layout_marginBottom="@dimen/set_padding_4"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginLeft="@dimen/set_marginSearchLists13"
+            android:layout_marginRight="@dimen/set_marginSearchLists13"/>
+</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/set_size24"
+            android:paddingBottom="@dimen/set_size24">
+        <Button
+            android:id="@+id/clear_history"
+            style="@style/ButtonStyle"
+            android:text="@string/clear_history"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

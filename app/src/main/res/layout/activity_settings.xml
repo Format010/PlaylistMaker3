@@ -25,15 +25,15 @@
         android:fontFamily="@font/ys_display_medium"
         style="?android:attr/borderlessButtonStyle"/>
 
-    <Switch
-        android:id="@+id/switch1"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
         style="@style/ButtonStyleSettings"
         android:layout_marginTop="@dimen/set_size24"
         android:paddingRight="@dimen/set_padding_6"
         android:text="@string/darkTheme"
-        android:thumbTint="?attr/colorOnPrimary"
-        android:trackTint="@color/yp_grey"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbTint="?attr/colorOnPrimary"
+        app:trackTint="?attr/colorSwitchThumbNormal" />
 
     <Button
         android:id="@+id/buttonShare"
