@@ -5,6 +5,8 @@
         <item name="colorPrimaryVariant">@color/yp_white</item>
         <item name="colorOnPrimary">@color/yp_blue</item>
         <item name="colorButtonNormal">@color/yp_black</item>
+        <item name="colorSwitchThumbNormal">@color/yp_grey</item>
+        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/yp_black</item>
         <item name="colorSecondaryVariant">@color/yp_black</item>
         <item name="colorOnSecondary">@color/yp_white</item>

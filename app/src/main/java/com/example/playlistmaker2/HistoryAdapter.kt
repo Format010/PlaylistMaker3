@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import layout.SearchHolder
 import java.util.LinkedList
 
-class SearchAdapter(
-    private val data: LinkedList<Track>, private val searchHistory: SearchHistory
-    ): RecyclerView.Adapter<SearchHolder>() {
+class HistoryAdapter(val data: LinkedList<Track>
+): RecyclerView.Adapter<SearchHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.search_item, parent, false)
@@ -21,12 +20,5 @@ class SearchAdapter(
 
         override fun onBindViewHolder(holder: SearchHolder, position: Int) {
             holder.bind(data[position])
-
-            holder.searchItemConstraint.setOnClickListener{
-                val searchHistoryList = searchHistory.read()
-                searchHistory.addTrackToHistory(searchHistoryList, data.get(position))
-
-            }
         }
-
-}
+    }
