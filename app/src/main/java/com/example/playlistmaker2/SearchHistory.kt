@@ -7,7 +7,7 @@ import java.util.LinkedList
 const val USER_KEY_HISTORY = "history_save"
 const val NAME_HISTORY_FILE_PREFERENCE = "history"
 
-class SearchHistory(var sharedPref: SharedPreferences)  {
+class SearchHistory(val sharedPref: SharedPreferences)  {
 
     fun read(): LinkedList<Track> {
         val json = sharedPref.getString(USER_KEY_HISTORY, null) ?: return LinkedList()

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AudioPlayer"
+    >
+
+    <Button
+        android:id="@+id/back_ap"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_height_56"
+        android:contentDescription=" "
+        app:icon="@drawable/back"
+        app:iconTint="?attr/colorPrimaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/artwork"
+        android:layout_width="0dp"
+        android:layout_height="312dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_ap"
+        app:srcCompat="@drawable/incorrect_link312"/>
+
+    <TextView
+        android:id="@+id/track_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="TextView"
+        android:fontFamily="@font/ys_text_medium"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artwork" />
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:text="TextView"
+        android:fontFamily="@font/ys_text_medium"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/track_name" />
+
+    <ImageView
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artist_name"
+        app:srcCompat="@drawable/play" />
+
+    <ImageView
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/play"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/play"
+        app:srcCompat="@drawable/check" />
+
+    <ImageView
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/play"
+        app:srcCompat="@drawable/like" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/ys_text_medium"
+        android:text="00:00"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/play"
+        app:layout_constraintStart_toStartOf="@+id/play"
+        app:layout_constraintTop_toBottomOf="@+id/play" />
+
+
+    <TextView
+        android:id="@+id/track_time_mills_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/ys_text_regular"
+        android:textSize="13sp"
+        android:text="Длительность"
+        app:layout_constraintBottom_toTopOf="@+id/collection_name_area"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="trackTimeMillsTag"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/collection_name_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/ys_text_regular"
+        android:text="Альбом"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/release_date_area"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="collectionNameTag"
+        app:layout_constraintTop_toBottomOf="@+id/track_time_mills_area" />
+
+    <TextView
+        android:id="@+id/release_date_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:text="Год"
+        android:fontFamily="@font/ys_text_regular"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/primary_genre_name_area"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="releaseDateTag"
+        app:layout_constraintTop_toBottomOf="@+id/collection_name_area" />
+
+    <TextView
+        android:id="@+id/primary_genre_name_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:text="Жанр"
+        android:fontFamily="@font/ys_text_regular"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/country_area"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="primaryGenreNameTag"
+        app:layout_constraintTop_toBottomOf="@+id/release_date_area" />
+
+    <TextView
+        android:id="@+id/country_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:text="Страна"
+        android:fontFamily="@font/ys_text_regular"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="countryTag"
+        app:layout_constraintTop_toBottomOf="@+id/primary_genre_name_area" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/texts_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_tags="countryTag, primaryGenreNameTag, releaseDateTag, collectionNameTag,  trackTimeMillsTag"
+        app:barrierDirection="end" />
+
+    <TextView
+        android:id="@+id/track_time_mills"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_text_regular"
+        android:maxLines="1"
+        android:text="00:00"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/texts_barrier"
+        app:layout_constraintTop_toTopOf="@+id/track_time_mills_area" />
+
+    <TextView
+        android:id="@+id/collection_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_text_regular"
+        android:maxLines="1"
+        android:text="альбом"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/texts_barrier"
+        app:layout_constraintTop_toTopOf="@+id/collection_name_area" />
+
+    <TextView
+        android:id="@+id/release_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_text_regular"
+        android:maxLines="1"
+        android:text="0000"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/texts_barrier"
+        app:layout_constraintTop_toTopOf="@+id/release_date_area" />
+
+    <TextView
+        android:id="@+id/primary_genre_game"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_text_regular"
+        android:maxLines="1"
+        android:text="Жанр"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/texts_barrier"
+        app:layout_constraintTop_toTopOf="@+id/primary_genre_name_area" />
+
+    <TextView
+        android:id="@+id/country"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_text_regular"
+        android:maxLines="1"
+        android:text="Страна"
+        android:textAlignment="textEnd"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/texts_barrier"
+        app:layout_constraintTop_toTopOf="@+id/country_area" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

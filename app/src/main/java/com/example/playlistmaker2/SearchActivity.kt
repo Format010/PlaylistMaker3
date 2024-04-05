@@ -1,5 +1,6 @@
 package com.example.playlistmaker2
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,10 +24,8 @@ import java.util.LinkedList
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var placeholderMessage: ViewGroup
-    private lateinit var placeholderMessage2: ViewGroup
-    private lateinit var inputEditText: EditText
-    private lateinit var historyLayout: LinearLayout
+    private var placeholderMessage: ViewGroup? = null
+    private var placeholderMessage2: ViewGroup? = null
     private var textValue: String = TEXT
     private val appleItunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
@@ -44,10 +43,10 @@ class SearchActivity : AppCompatActivity() {
         val back = findViewById<Button>(R.id.back_search)
         val clearButton = findViewById<ImageView>(R.id.clear_text)
         val update = findViewById<Button>(R.id.update)
-        inputEditText = findViewById(R.id.input_search)
+        val inputEditText = findViewById<EditText>(R.id.input_search)
         placeholderMessage = findViewById(R.id.placeholder_message)
         placeholderMessage2 = findViewById(R.id.placeholder_message2)
-        historyLayout = findViewById(R.id.history_layout)
+        val historyLayout = findViewById<LinearLayout>(R.id.history_layout)
         val sharedPrefs = getSharedPreferences(NAME_HISTORY_FILE_PREFERENCE, MODE_PRIVATE)
         val saveHistory = SearchHistory(sharedPrefs)
         val songAdapter = SearchAdapter(listSong, saveHistory)
@@ -58,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
         fun searchMusicFun() {
 
-            if (inputEditText.text.isNotEmpty()) {
+            if (inputEditText.text?.isNotEmpty() == true) {
                 appleItunesApi.searchSong(inputEditText.text.toString())
                     .enqueue(object : Callback<MusicResponse> {
                         override fun onResponse(
@@ -105,12 +104,12 @@ class SearchActivity : AppCompatActivity() {
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
                 listSong.clear()
                 songAdapter.notifyDataSetChanged()
-                rvHistory.adapter = HistoryAdapter(saveHistory.read())
-                if (placeholderMessage2.visibility == View.VISIBLE) {
-                    placeholderMessage2.visibility = View.GONE
+                rvHistory.adapter = HistoryAdapter(saveHistory.read(), saveHistory)
+                if (placeholderMessage2?.isVisible == true) {
+                    placeholderMessage2?.isVisible = false
                 }
-                if (placeholderMessage.visibility == View.VISIBLE) {
-                    placeholderMessage.visibility = View.GONE
+                if (placeholderMessage?.isVisible == true) {
+                    placeholderMessage?.isVisible = false
                 }
 
             }
@@ -118,24 +117,24 @@ class SearchActivity : AppCompatActivity() {
 
         update.setOnClickListener {
             searchMusicFun()
-            if (placeholderMessage2.visibility == View.VISIBLE) {
-                placeholderMessage2.visibility = View.GONE
+            if (placeholderMessage2?.isVisible == true) {
+                placeholderMessage2?.isVisible = false
             }
         }
 
         clearHistoryButton.setOnClickListener{
             saveHistory.clearSearch()
-            rvHistory.adapter = HistoryAdapter(saveHistory.read())
-            historyLayout.visibility = View.GONE
+            rvHistory.adapter = HistoryAdapter(saveHistory.read(), saveHistory)
+            historyLayout.isVisible = false
         }
 
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+        inputEditText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (placeholderMessage2.visibility == View.VISIBLE) {
-                    placeholderMessage2.visibility = View.GONE
+                if (placeholderMessage2?.isVisible == true) {
+                    placeholderMessage2?.isVisible = false
                 }
-                if (placeholderMessage.visibility == View.VISIBLE) {
-                    placeholderMessage.visibility = View.GONE
+                if (placeholderMessage?.isVisible == true) {
+                    placeholderMessage?.isVisible = false
                 }
                 listSong.clear()
                 searchMusicFun()
@@ -149,19 +148,19 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-                historyLayout.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
-                historyLayout.visibility = if(saveHistory.read().isEmpty()) View.GONE else View.VISIBLE
+                historyLayout.isVisible = if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
+                historyLayout.isVisible = if(saveHistory.read().isEmpty()) false else true
             }
 
             override fun afterTextChanged(s: Editable?) {
                 textValue = s.toString()
             }
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        inputEditText?.addTextChangedListener(simpleTextWatcher)
 
         rvSearch.adapter = songAdapter
-        rvHistory.adapter = HistoryAdapter(saveHistory.read())
-        if (saveHistory.read().isNotEmpty()) historyLayout.visibility = View.VISIBLE
+        rvHistory.adapter = HistoryAdapter(saveHistory.read(), saveHistory)
+        if (saveHistory.read().isNotEmpty()) historyLayout.isVisible = true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -179,7 +178,7 @@ class SearchActivity : AppCompatActivity() {
             "Ничего не нашлось" -> {
                 if (text.isNotEmpty()) {
                     listSong.clear()
-                    placeholderMessage.visibility = View.VISIBLE
+                    placeholderMessage?.isVisible = true
 
                 }
             }
@@ -187,7 +186,7 @@ class SearchActivity : AppCompatActivity() {
             "Проблемы со связью" -> {
                 if (text.isNotEmpty()) {
                     listSong.clear()
-                    placeholderMessage2.visibility = View.VISIBLE
+                    placeholderMessage2?.isVisible = true
 
                 }
             }
