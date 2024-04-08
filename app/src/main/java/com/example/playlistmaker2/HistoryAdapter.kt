@@ -20,6 +20,6 @@ class HistoryAdapter(val data: LinkedList<Track>, val searchHistory: SearchHisto
         }
 
         override fun onBindViewHolder(holder: SearchHolder, position: Int) {
-            holder.bind(data[position], searchHistory)
+            holder.bind(data[position])
         }
     }

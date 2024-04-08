@@ -21,7 +21,7 @@ class SearchAdapter(
         }
 
         override fun onBindViewHolder(holder: SearchHolder, position: Int) {
-            holder.bind(data[position], searchHistory)
+            holder.bind(data[position])
 
 //            holder.searchItemConstraint.setOnClickListener{
 //                val searchHistoryList = searchHistory.read()

@@ -20,14 +20,13 @@ const val AUDIO_PLAYER_DATA = "track"
 
 class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
     private val artwork: ImageView = itemView.findViewById(R.id.artwork)
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
     val searchItemConstraint: View = itemView.findViewById(R.id.search_item)
 
-    fun bind(track: Track, searchHistory: SearchHistory) {
+    fun bind(track: Track) {
 
         Glide.with(itemView)
             .load(track.artworkUrl100)
@@ -49,9 +48,6 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             intent.putExtra(AUDIO_PLAYER_DATA, track)
             it.context.startActivity(intent)
 
-//            val searchHistoryList = searchHistory.read()
-//            searchHistory.addTrackToHistory(searchHistoryList, track)
         }
-
     }
 }

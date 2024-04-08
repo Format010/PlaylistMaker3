@@ -1,6 +1,5 @@
 package com.example.playlistmaker2
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -53,7 +52,6 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
         val rvHistory = findViewById<RecyclerView>(R.id.historyRecyclerView)
         val rvSearch = findViewById<RecyclerView>(R.id.searchRecyclerView)
-
 
         fun searchMusicFun() {
 
@@ -111,7 +109,6 @@ class SearchActivity : AppCompatActivity() {
                 if (placeholderMessage?.isVisible == true) {
                     placeholderMessage?.isVisible = false
                 }
-
             }
         }
 
@@ -122,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        clearHistoryButton.setOnClickListener{
+        clearHistoryButton.setOnClickListener {
             saveHistory.clearSearch()
             rvHistory.adapter = HistoryAdapter(saveHistory.read(), saveHistory)
             historyLayout.isVisible = false
@@ -148,8 +145,9 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-                historyLayout.isVisible = if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
-                historyLayout.isVisible = if(saveHistory.read().isEmpty()) false else true
+                historyLayout.isVisible =
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
+                historyLayout.isVisible = if (saveHistory.read().isEmpty()) false else true
             }
 
             override fun afterTextChanged(s: Editable?) {
