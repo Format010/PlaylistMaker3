@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import layout.AUDIO_PLAYER_DATA
@@ -39,6 +40,7 @@ class AudioPlayer() : AppCompatActivity() {
         val primaryGenre = findViewById<TextView>(R.id.primary_genre_game)
         val country = findViewById<TextView>(R.id.country)
         val sharedPrefs = getSharedPreferences(NAME_HISTORY_FILE_PREFERENCE, MODE_PRIVATE)
+        val year = track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
 
         artistName.text = track?.artistName
         trackName.text = track?.trackName
@@ -50,7 +52,7 @@ class AudioPlayer() : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(track?.artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg"))
+            .load(track?.artworkUrl512)
             .transform(RoundedCorners(10))
             .placeholder(R.drawable.incorrect_link)
             .into(artwork)
@@ -62,16 +64,10 @@ class AudioPlayer() : AppCompatActivity() {
             ).format(track.trackTimeMillis.toLong())
         } else trackTimeMills.text = "00:00"
 
-        if (track?.collectionName != null){
-            collectionNameArea.visibility = View.VISIBLE
-            collectionName.visibility = View.VISIBLE
-            collectionName.text = track.collectionName
-        } else {
-            collectionNameArea.visibility = View.GONE
-            collectionName.visibility = View.GONE
-        }
-
-        releaseDate.text = track?.releaseDate?.substring(0..3)
+        collectionNameArea.isVisible = track?.collectionName != null
+        collectionName.isVisible = track?.collectionName != null
+        collectionName.text = track?.collectionName
+        releaseDate.text = year
         primaryGenre.text = track?.primaryGenreName
         country.text = track?.country
 
