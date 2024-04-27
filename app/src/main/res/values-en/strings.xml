@@ -20,4 +20,13 @@
     <string name="update">Update</string>
     <string name="clear_history">Clear the history</string>
     <string name="looking_history">You were looking for</string>
+    <string name="track_name">Track name</string>
+    <string name="artist_name">Artist</string>
+    <string name="timing">00:00</string>
+    <string name="track_time">Track time</string>
+    <string name="collection_name">Collection</string>
+    <string name="release_date">Year</string>
+    <string name="primary_genre_name">Genre</string>
+    <string name="country">Сountry</string>
+
 </resources>

@@ -13,9 +13,12 @@
     <dimen name="set_textSize16">16sp</dimen>
     <dimen name="set_textSize19">19sp</dimen>
     <dimen name="set_textSize11">11sp</dimen>
+    <dimen name="set_textSize13">13sp</dimen>
     <dimen name="set_textSize14">14sp</dimen>
+    <dimen name="set_textSize22">22sp</dimen>
     <dimen name="set_padding16">16dp</dimen>
     <dimen name="set_padding18">18dp</dimen>
+    <dimen name="marginTop12">12dp</dimen>
     <dimen name="set_size24">24dp</dimen>
     <dimen name="set_marginSearchLists13">13dp</dimen>
     <dimen name="set_marginSearchLists14">14dp</dimen>

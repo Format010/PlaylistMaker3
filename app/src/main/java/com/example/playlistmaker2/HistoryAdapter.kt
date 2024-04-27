@@ -1,12 +1,13 @@
 package com.example.playlistmaker2
 
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import layout.SearchHolder
 import java.util.LinkedList
 
-class HistoryAdapter(val data: LinkedList<Track>
+class HistoryAdapter(val data: LinkedList<Track>, val searchHistory: SearchHistory
 ): RecyclerView.Adapter<SearchHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {

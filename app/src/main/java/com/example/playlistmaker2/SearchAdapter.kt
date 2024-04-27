@@ -1,5 +1,6 @@
 package com.example.playlistmaker2
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +23,11 @@ class SearchAdapter(
         override fun onBindViewHolder(holder: SearchHolder, position: Int) {
             holder.bind(data[position])
 
-            holder.searchItemConstraint.setOnClickListener{
-                val searchHistoryList = searchHistory.read()
-                searchHistory.addTrackToHistory(searchHistoryList, data.get(position))
-
-            }
+//            holder.searchItemConstraint.setOnClickListener{
+//                val searchHistoryList = searchHistory.read()
+//                searchHistory.addTrackToHistory(searchHistoryList, data.get(position))
+//
+//            }
         }
 
 }
