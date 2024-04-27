@@ -37,7 +37,6 @@
             android:drawablePadding="@dimen/set_padding_10"
             android:drawableTint="?attr/colorOnPrimarySurface"
             android:hint="@string/search"
-            android:imeOptions="actionDone"
             android:inputType="text"
             android:focusableInTouchMode="true"
             android:maxLines="1"
@@ -65,6 +64,14 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginLeft="@dimen/set_marginSearchLists13"
         android:layout_marginRight="@dimen/set_marginSearchLists13"/>
+
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/set_marginTop140"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/yp_blue_progress_bar"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/placeholder_message"
