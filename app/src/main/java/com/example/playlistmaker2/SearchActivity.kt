@@ -34,6 +34,8 @@ class SearchActivity : AppCompatActivity() {
         .build()
     val appleItunesApi = retrofit.create(AppleItunesApi::class.java)
     val listSong = LinkedList<Track>()
+    var nothingSearch: String = ""
+    var notConnectInternet: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,10 @@ class SearchActivity : AppCompatActivity() {
         val rvHistory = findViewById<RecyclerView>(R.id.historyRecyclerView)
         val rvSearch = findViewById<RecyclerView>(R.id.searchRecyclerView)
         val progressBar = findViewById<View>(R.id.progressBar)
+        nothingSearch = getString(R.string.not_search)
+        notConnectInternet = getString(R.string.not_connect)
+
+
 
         fun searchMusicFun() {
 
@@ -79,19 +85,19 @@ class SearchActivity : AppCompatActivity() {
                                     songAdapter.notifyDataSetChanged()
                                 }
                                 if (listSong.isEmpty()) {
-                                    showMessage("Ничего не нашлось", "")
+                                    showMessage(nothingSearch, "")
                                 } else {
                                     showMessage("", "")
                                 }
                             } else {
-                                showMessage("Проблемы со связью", response.code().toString())
+                                showMessage(notConnectInternet, response.code().toString())
                             }
                         }
 
                         override fun onFailure(call: Call<MusicResponse>, t: Throwable) {
 
                             progressBar.isVisible = progressBar.visibility != View.VISIBLE
-                            showMessage("Проблемы со связью", t.message.toString())
+                            showMessage(notConnectInternet, t.message.toString())
                         }
                     })
             }
@@ -146,20 +152,6 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.isVisible = false
         }
 
-//        inputEditText?.setOnEditorActionListener { _, actionId, _ ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                if (placeholderMessage2?.isVisible == true) {
-//                    placeholderMessage2?.isVisible = false
-//                }
-//                if (placeholderMessage?.isVisible == true) {
-//                    placeholderMessage?.isVisible = false
-//                }
-//                listSong.clear()
-//                searchMusicFun()
-//            }
-//            false
-//        }
-
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -205,7 +197,7 @@ class SearchActivity : AppCompatActivity() {
 
     fun showMessage(text: String, additionalMessage: String) {
         when (text) {
-            "Ничего не нашлось" -> {
+            nothingSearch -> {
                 if (text.isNotEmpty()) {
                     listSong.clear()
                     placeholderMessage?.isVisible = true
@@ -213,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            "Проблемы со связью" -> {
+            notConnectInternet -> {
                 if (text.isNotEmpty()) {
                     listSong.clear()
                     placeholderMessage2?.isVisible = true

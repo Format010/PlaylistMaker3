@@ -23,14 +23,16 @@ class AudioPlayer() : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val DELAY = 1000L
+        private const val DELAY = 500L
     }
+
     private var playerState = STATE_DEFAULT
     private var play: ImageView? = null
     private var url: String? = null
     private var mediaPlayer = MediaPlayer()
     private var timer: TextView? = null
     private val handler = Handler(Looper.getMainLooper())
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,8 @@ class AudioPlayer() : AppCompatActivity() {
         val primaryGenre = findViewById<TextView>(R.id.primary_genre_game)
         val country = findViewById<TextView>(R.id.country)
         val sharedPrefs = getSharedPreferences(NAME_HISTORY_FILE_PREFERENCE, MODE_PRIVATE)
-        val year = track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
+        val year =
+            track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
 
         url = track?.previewUrl
         artistName.text = track?.artistName
@@ -109,6 +112,7 @@ class AudioPlayer() : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        playerState = STATE_DEFAULT
     }
 
     private fun preparePlayer() {
@@ -134,8 +138,6 @@ class AudioPlayer() : AppCompatActivity() {
         startTimer()
     }
 
-
-
     private fun pausePlayer() {
         mediaPlayer.pause()
         play?.setImageResource(R.drawable.play)
@@ -143,10 +145,11 @@ class AudioPlayer() : AppCompatActivity() {
     }
 
     private fun playbackControl() {
-        when(playerState) {
+        when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -162,14 +165,12 @@ class AudioPlayer() : AppCompatActivity() {
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                val time =
-                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
 
-                if (playerState == 2 || playerState == 3) { //Если состояние плеера Play
-                    timer?.text = time
+                if (playerState == 2 || playerState == 3) { //Если состояние плеера Play или Pause
+                    timer?.text = dateFormat.format(mediaPlayer.currentPosition)
                     handler.postDelayed(this, DELAY)
                 } else {
-                    timer?.text = "00:00"
+                    timer?.text = dateFormat.format(0)
                 }
             }
         }
