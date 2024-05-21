@@ -15,6 +15,10 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker2.data.dto.MusicResponse
+
+import com.example.playlistmaker2.data.network.AppleItunesApi
+import com.example.playlistmaker2.domain.models.Track
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
