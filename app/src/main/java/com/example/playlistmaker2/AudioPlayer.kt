@@ -1,8 +1,10 @@
 package com.example.playlistmaker2
 
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +18,22 @@ import java.util.Locale
 
 class AudioPlayer() : AppCompatActivity() {
 
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val DELAY = 500L
+    }
+
+    private var playerState = STATE_DEFAULT
+    private var play: ImageView? = null
+    private var url: String? = null
+    private var mediaPlayer = MediaPlayer()
+    private var timer: TextView? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
@@ -27,6 +45,8 @@ class AudioPlayer() : AppCompatActivity() {
                 intent?.extras?.getParcelable(AUDIO_PLAYER_DATA)
             }
 
+        play = findViewById(R.id.play)
+        timer = findViewById(R.id.timing)
         val back = findViewById<Button>(R.id.back_ap)
         val artwork = findViewById<ImageView>(R.id.artwork)
         val trackName = findViewById<TextView>(R.id.track_name)
@@ -40,10 +60,18 @@ class AudioPlayer() : AppCompatActivity() {
         val primaryGenre = findViewById<TextView>(R.id.primary_genre_game)
         val country = findViewById<TextView>(R.id.country)
         val sharedPrefs = getSharedPreferences(NAME_HISTORY_FILE_PREFERENCE, MODE_PRIVATE)
-        val year = track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
+        val year =
+            track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
 
+        url = track?.previewUrl
         artistName.text = track?.artistName
         trackName.text = track?.trackName
+
+        preparePlayer()
+
+        play?.setOnClickListener {
+            playbackControl()
+        }
 
         addPlayList.setOnClickListener {
             val searchHistory = SearchHistory(sharedPrefs)
@@ -54,7 +82,7 @@ class AudioPlayer() : AppCompatActivity() {
         Glide.with(this)
             .load(track?.artworkUrl512)
             .transform(RoundedCorners(10))
-            .placeholder(R.drawable.incorrect_link)
+            .placeholder(R.drawable.incorrect_link312)
             .into(artwork)
 
         if (track?.trackTimeMillis != null) {
@@ -73,6 +101,78 @@ class AudioPlayer() : AppCompatActivity() {
 
         back.setOnClickListener {
             finish()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        playerState = STATE_DEFAULT
+    }
+
+    private fun preparePlayer() {
+        if (url != null) {
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                play?.isEnabled = true
+                playerState = STATE_PREPARED
+            }
+            mediaPlayer.setOnCompletionListener {
+                play?.setImageResource(R.drawable.play)
+                playerState = STATE_PREPARED
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        play?.setImageResource(R.drawable.pause)
+        playerState = STATE_PLAYING
+
+        startTimer()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        play?.setImageResource(R.drawable.play)
+        playerState = STATE_PAUSED
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun startTimer() {
+        handler.post(
+            createUpdateTimerTask()
+        )
+    }
+
+    private fun createUpdateTimerTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+
+                if (playerState == 2 || playerState == 3) { //Если состояние плеера Play или Pause
+                    timer?.text = dateFormat.format(mediaPlayer.currentPosition)
+                    handler.postDelayed(this, DELAY)
+                } else {
+                    timer?.text = dateFormat.format(0)
+                }
+            }
         }
     }
 }
