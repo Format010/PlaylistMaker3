@@ -1,31 +1,30 @@
-package com.example.playlistmaker2.domain.impl
+package com.example.playlistmaker2.data.platform
 
-import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
-import com.example.playlistmaker2.data.MediaPlayerInt
+import androidx.annotation.Nullable
 import com.example.playlistmaker2.data.dto.TimeFormatting
+import com.example.playlistmaker2.domain.api.AudioPlayerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MediaPlayerImpl(private val context: Context): MediaPlayerInt {
-
+class AudioPlayerRepositoryImpl: AudioPlayerRepository {
     companion object {
         private const val DELAY = 500L
     }
 
     private var mediaPlayer: MediaPlayer? = null
     private val playerScope = CoroutineScope(Dispatchers.Main + Job())
-    lateinit var runnable: Runnable
+
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun inicializePlayer(
+    override fun initializePlayer(
         resourceId: String,
         onCompletionListener: MediaPlayer.OnCompletionListener?
     ) {
@@ -91,6 +90,8 @@ class MediaPlayerImpl(private val context: Context): MediaPlayerInt {
     }
 
     //Таймер
+    lateinit var runnable: Runnable
+
     override fun startTimer(textView: TextView) {
         runnable = object : Runnable {
             override fun run() {
@@ -99,7 +100,7 @@ class MediaPlayerImpl(private val context: Context): MediaPlayerInt {
                 handler.postDelayed(this, DELAY)
             }
         }
-            handler.postDelayed(runnable, DELAY)
+        handler.postDelayed(runnable, DELAY)
     }
 
     override fun stopTimer(textView: TextView) {

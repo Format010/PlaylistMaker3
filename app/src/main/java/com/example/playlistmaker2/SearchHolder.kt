@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 
-import com.example.playlistmaker2.presentation.ui.audio.AudioPlayer
+import com.example.playlistmaker2.presentation.ui.audio.AudioPlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -51,7 +51,7 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         searchItemConstraint.setOnClickListener {
         if (clickDebounce()) {
 
-            val intent = Intent(it.context, AudioPlayer::class.java)
+            val intent = Intent(it.context, AudioPlayerActivity::class.java)
             intent.putExtra(AUDIO_PLAYER_DATA, track)
             it.context.startActivity(intent)
             }

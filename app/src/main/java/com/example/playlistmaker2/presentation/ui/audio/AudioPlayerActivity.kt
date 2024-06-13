@@ -13,19 +13,21 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker2.NAME_HISTORY_FILE_PREFERENCE
 import com.example.playlistmaker2.R
 import com.example.playlistmaker2.SearchHistory
+import com.example.playlistmaker2.creator.Creator
 import com.example.playlistmaker2.data.dto.ClickDelay
 import com.example.playlistmaker2.data.dto.TimeFormatting
-import com.example.playlistmaker2.domain.impl.MediaPlayerImpl
+import com.example.playlistmaker2.domain.api.AudioPlayerInteractor
 import com.example.playlistmaker2.domain.models.Track
 import layout.AUDIO_PLAYER_DATA
 
-class AudioPlayer() : AppCompatActivity() {
+class AudioPlayerActivity() : AppCompatActivity() {
 
     private var play: ImageView? = null
     private var url: String? = null
     private var timer: TextView? = null
-    private lateinit var audioPlayer: MediaPlayerImpl
-    private var clickDelay = ClickDelay()
+   // private lateinit var audioPlayer : MediaPlayerInterface
+    private lateinit var audioPlayer: AudioPlayerInteractor
+    private val clickDelay = ClickDelay()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,27 +59,29 @@ class AudioPlayer() : AppCompatActivity() {
         val year =
             track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
         val timeFormatting = track?.trackTimeMillis?.let { TimeFormatting().simpleDataFormat(it) }
-        audioPlayer = MediaPlayerImpl(this)
+        //audioPlayer = MediaPlayerImpl()
+        audioPlayer = Creator.providePlayerInteractor()
 
         url = track?.previewUrl
 
         artistName.text = track?.artistName
         trackName.text = track?.trackName
 
-        audioPlayer.inicializePlayer(url.toString(),
+        audioPlayer.initializePlayer(url.toString(),
             MediaPlayer.OnCompletionListener{
                 play?.setImageResource(R.drawable.play)
-                audioPlayer.stopTimer(timer!!)
-                audioPlayer.stop()
+                timer?.let { audioPlayer.stopTimer(it) }
+                audioPlayer?.stop()
 
             })
 
         play?.setOnClickListener {
             if (clickDelay.clickDebounce()) {
-                if (!audioPlayer.isPlaying() ) { //|| playerState == STATE_PREPARED
+                if (!audioPlayer.isPlaying()) { //|| playerState == STATE_PREPARED
                     audioPlayer.play()
                     play?.setImageResource(R.drawable.pause)
-                    audioPlayer.startTimer(timer!!)
+                    timer?.let { audioPlayer.startTimer(it) }
+                        //timer?.let { audioPlayer.stopTimer(it) } //audioPlayer.startTimer(timer)
                 } else {
                     audioPlayer.pause()
                     play?.setImageResource(R.drawable.play)
@@ -118,7 +122,7 @@ class AudioPlayer() : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        audioPlayer.stopTimer(timer!!)
+        timer?.let { audioPlayer.stopTimer(it) }
         audioPlayer.release()
     }
 

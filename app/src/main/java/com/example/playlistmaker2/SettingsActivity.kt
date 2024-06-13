@@ -5,9 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker2.data.App
-import com.example.playlistmaker2.data.NAME_SHARED_FILE
-import com.example.playlistmaker2.data.SECRET_KEY
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {

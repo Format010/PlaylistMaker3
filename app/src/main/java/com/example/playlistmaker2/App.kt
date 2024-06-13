@@ -1,4 +1,4 @@
-package com.example.playlistmaker2.data
+package com.example.playlistmaker2
 
 import android.app.Application
 import android.content.Context

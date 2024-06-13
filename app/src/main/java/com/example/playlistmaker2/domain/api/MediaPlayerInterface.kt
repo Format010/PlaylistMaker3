@@ -1,11 +1,11 @@
-package com.example.playlistmaker2.data
+package com.example.playlistmaker2.domain.api
 
 import android.media.MediaPlayer
 import android.widget.TextView
-import com.example.playlistmaker2.domain.models.MusicPlayerState
 
-interface MediaPlayerInt {
-    fun inicializePlayer(resourceId: String, onCompletionListener: MediaPlayer.OnCompletionListener?)
+
+interface MediaPlayerInterface {
+    fun initializePlayer(resourceId: String, onCompletionListener: MediaPlayer.OnCompletionListener?)
 
     fun play()
 

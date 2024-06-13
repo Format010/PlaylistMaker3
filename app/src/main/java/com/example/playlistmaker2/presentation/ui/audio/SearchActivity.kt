@@ -1,4 +1,4 @@
-package com.example.playlistmaker2
+package com.example.playlistmaker2.presentation.ui.audio
 
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +15,13 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker2.data.dto.MusicResponse
+import com.example.playlistmaker2.HistoryAdapter
+import com.example.playlistmaker2.NAME_HISTORY_FILE_PREFERENCE
+import com.example.playlistmaker2.R
+import com.example.playlistmaker2.SearchAdapter
+import com.example.playlistmaker2.SearchHistory
+
+import com.example.playlistmaker2.data.dto.MusicSearchResponse
 
 import com.example.playlistmaker2.data.network.AppleItunesApi
 import com.example.playlistmaker2.domain.models.Track
@@ -75,10 +81,10 @@ class SearchActivity : AppCompatActivity() {
                 progressBar.isVisible = true
 
                 appleItunesApi.searchSong(inputEditText.text.toString())
-                    .enqueue(object : Callback<MusicResponse> {
+                    .enqueue(object : Callback<MusicSearchResponse> {
                         override fun onResponse(
-                            call: Call<MusicResponse>,
-                            response: Response<MusicResponse>
+                            call: Call<MusicSearchResponse>,
+                            response: Response<MusicSearchResponse>
                         ) {
                             progressBar.isVisible = false
 
@@ -98,7 +104,7 @@ class SearchActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<MusicResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<MusicSearchResponse>, t: Throwable) {
 
                             progressBar.isVisible = progressBar.visibility != View.VISIBLE
                             showMessage(notConnectInternet, t.message.toString())
