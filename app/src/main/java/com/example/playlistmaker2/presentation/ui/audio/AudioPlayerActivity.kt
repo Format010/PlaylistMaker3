@@ -1,10 +1,8 @@
-package com.example.playlistmaker2
+package com.example.playlistmaker2.presentation.ui.audio
 
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,27 +10,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker2.NAME_HISTORY_FILE_PREFERENCE
+import com.example.playlistmaker2.R
+import com.example.playlistmaker2.SearchHistory
+import com.example.playlistmaker2.creator.Creator
+import com.example.playlistmaker2.data.dto.ClickDelay
+import com.example.playlistmaker2.data.dto.TimeFormatting
+import com.example.playlistmaker2.domain.api.AudioPlayerInteractor
+import com.example.playlistmaker2.domain.models.Track
 import layout.AUDIO_PLAYER_DATA
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class AudioPlayer() : AppCompatActivity() {
+class AudioPlayerActivity() : AppCompatActivity() {
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY = 500L
-    }
-
-    private var playerState = STATE_DEFAULT
     private var play: ImageView? = null
     private var url: String? = null
-    private var mediaPlayer = MediaPlayer()
     private var timer: TextView? = null
-    private val handler = Handler(Looper.getMainLooper())
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+   // private lateinit var audioPlayer : MediaPlayerInterface
+    private lateinit var audioPlayer: AudioPlayerInteractor
+    private val clickDelay = ClickDelay()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,15 +58,35 @@ class AudioPlayer() : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences(NAME_HISTORY_FILE_PREFERENCE, MODE_PRIVATE)
         val year =
             track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
+        val timeFormatting = track?.trackTimeMillis?.let { TimeFormatting().simpleDataFormat(it) }
+        //audioPlayer = MediaPlayerImpl()
+        audioPlayer = Creator.providePlayerInteractor()
 
         url = track?.previewUrl
+
         artistName.text = track?.artistName
         trackName.text = track?.trackName
 
-        preparePlayer()
+        audioPlayer.initializePlayer(url.toString(),
+            MediaPlayer.OnCompletionListener{
+                play?.setImageResource(R.drawable.play)
+                timer?.let { audioPlayer.stopTimer(it) }
+                audioPlayer?.stop()
+
+            })
 
         play?.setOnClickListener {
-            playbackControl()
+            if (clickDelay.clickDebounce()) {
+                if (!audioPlayer.isPlaying()) { //|| playerState == STATE_PREPARED
+                    audioPlayer.play()
+                    play?.setImageResource(R.drawable.pause)
+                    timer?.let { audioPlayer.startTimer(it) }
+                        //timer?.let { audioPlayer.stopTimer(it) } //audioPlayer.startTimer(timer)
+                } else {
+                    audioPlayer.pause()
+                    play?.setImageResource(R.drawable.play)
+                }
+            }
         }
 
         addPlayList.setOnClickListener {
@@ -85,12 +101,7 @@ class AudioPlayer() : AppCompatActivity() {
             .placeholder(R.drawable.incorrect_link312)
             .into(artwork)
 
-        if (track?.trackTimeMillis != null) {
-            trackTimeMills.text = SimpleDateFormat(
-                "mm:ss",
-                Locale.getDefault()
-            ).format(track.trackTimeMillis.toLong())
-        } else trackTimeMills.text = "00:00"
+        trackTimeMills.text = timeFormatting.toString()
 
         collectionNameArea.isVisible = track?.collectionName != null
         collectionName.isVisible = track?.collectionName != null
@@ -106,73 +117,14 @@ class AudioPlayer() : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        audioPlayer.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        playerState = STATE_DEFAULT
+        timer?.let { audioPlayer.stopTimer(it) }
+        audioPlayer.release()
     }
 
-    private fun preparePlayer() {
-        if (url != null) {
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                play?.isEnabled = true
-                playerState = STATE_PREPARED
-            }
-            mediaPlayer.setOnCompletionListener {
-                play?.setImageResource(R.drawable.play)
-                playerState = STATE_PREPARED
-            }
-        }
-    }
 
-    private fun startPlayer() {
-        mediaPlayer.start()
-        play?.setImageResource(R.drawable.pause)
-        playerState = STATE_PLAYING
-
-        startTimer()
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        play?.setImageResource(R.drawable.play)
-        playerState = STATE_PAUSED
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }
-
-    private fun startTimer() {
-        handler.post(
-            createUpdateTimerTask()
-        )
-    }
-
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-
-                if (playerState == 2 || playerState == 3) { //Если состояние плеера Play или Pause
-                    timer?.text = dateFormat.format(mediaPlayer.currentPosition)
-                    handler.postDelayed(this, DELAY)
-                } else {
-                    timer?.text = dateFormat.format(0)
-                }
-            }
-        }
-    }
 }

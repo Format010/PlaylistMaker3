@@ -1,9 +1,9 @@
 package com.example.playlistmaker2
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker2.domain.models.Track
 import layout.SearchHolder
 import java.util.LinkedList
 
