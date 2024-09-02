@@ -3,18 +3,17 @@ package layout
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker2.R
-import com.example.playlistmaker2.Track
+import com.example.playlistmaker2.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker2.AudioPlayer
-import com.example.playlistmaker2.SearchActivity
-import com.example.playlistmaker2.SearchHistory
+
+
+import com.example.playlistmaker2.presentation.ui.audio.AudioPlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -47,16 +46,16 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 "mm:ss",
                 Locale.getDefault()
             ).format(track.trackTimeMillis.toLong())
-        } else trackTime.text = "0:00"
+        } else trackTime.text = SimpleDateFormat().format(0)
 
         searchItemConstraint.setOnClickListener {
         if (clickDebounce()) {
-            val intent = Intent(it.context, AudioPlayer::class.java)
+
+            val intent = Intent(it.context, AudioPlayerActivity::class.java)
             intent.putExtra(AUDIO_PLAYER_DATA, track)
             it.context.startActivity(intent)
             }
         }
-
     }
     private fun clickDebounce() : Boolean {
         val current = isClickAllowed
