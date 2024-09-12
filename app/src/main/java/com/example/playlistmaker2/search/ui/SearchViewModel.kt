@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +19,7 @@ import com.example.playlistmaker2.SEARCH_DEBOUNCE_DELAY
 import com.example.playlistmaker2.search.domain.SearchInteractor
 import com.example.playlistmaker2.search.domain.model.Track
 import com.example.playlistmaker2.util.CreatorSearch
-import java.util.LinkedList
+
 
 class SearchViewModel(application: Application): AndroidViewModel(application) {
 
@@ -33,7 +32,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
-    //Передаем в RetrofitNetworkClient для функции которая узнает есть ли подключение к интернету
+    //Передаем ConnectivityManager в RetrofitNetworkClient для функции которая узнает есть ли подключение к интернету
     private val connectivityManager = application.getSystemService(
                 Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -41,7 +40,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private var latestSearchText: String? = null
     private val stateLiveData = MutableLiveData<SearchState>()
 
-    val listSong = LinkedList<Track>()
+    var listSong: List<Track> = emptyList()
     val handler = Handler(Looper.getMainLooper())
 
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -59,8 +58,8 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
                             if (foundMusic != null) {
 
-                                listSong.clear()
-                                listSong.addAll(foundMusic)
+                                listSong = emptyList()
+                                listSong = foundMusic
                                 renderState(SearchState.Content(listSong))
 
                             }
@@ -84,14 +83,13 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             }
             "Not connect internet" -> {
                 renderState(SearchState.Error)
-
             }
             "Ошибка сервера" -> {
 
-                renderState(SearchState.Empty)
+                renderState(SearchState.Error)
             }
             "404" ->{
-                renderState(SearchState.Empty)
+                renderState(SearchState.Error)
             }
         }
     }
@@ -117,7 +115,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                 postTime,
             )
         }
-        listSong.clear()
+        listSong = emptyList()
     }
 
     override fun onCleared() {

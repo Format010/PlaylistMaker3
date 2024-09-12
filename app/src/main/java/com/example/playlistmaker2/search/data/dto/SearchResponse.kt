@@ -4,5 +4,5 @@ import com.example.playlistmaker2.search.domain.model.Track
 import java.util.LinkedList
 
 class SearchResponse(
-    val results: LinkedList<Track>
+    val results: List<Track>
 ) : Response()

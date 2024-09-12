@@ -8,10 +8,10 @@ import com.example.playlistmaker2.R
 import com.example.playlistmaker2.search.domain.model.Track
 import com.google.gson.Gson
 import layout.SearchHolder
-import java.util.LinkedList
+
 
 class SearchAdapter(
-    var data: LinkedList<Track>,
+    var data: List<Track>,
     val sharedPreferences: SharedPreferences,
     val gson: Gson
     ): RecyclerView.Adapter<SearchHolder>() {

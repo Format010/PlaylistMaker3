@@ -7,6 +7,8 @@ import com.example.playlistmaker2.search.data.dto.SearchRequest
 import com.example.playlistmaker2.search.data.dto.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class RetrofitNetworkClient(private val connectivityManager: ConnectivityManager) : NetworkClient {
 
@@ -24,18 +26,38 @@ class RetrofitNetworkClient(private val connectivityManager: ConnectivityManager
             return Response(-1)
         }
         if (dto is SearchRequest) {
-            val resp = imdbService.searchSong(dto.expression).execute()
+            try {
+                val resp = imdbService.searchSong(dto.expression).execute()
+                if (resp.isSuccessful) {
+                    val body = resp.body() ?: Response(resp.code())
+                    body.code = resp.code()
+                    return body
+                } else {
+                    return Response(resp.code())
+                }
 
-            val body = resp.body() ?: Response(resp.code())
-            body.code = resp.code()
-
-            return body
-
+            } catch (e: SocketTimeoutException) {
+                return Response(404)
+            } catch (e: IOException) {
+                return Response(404)
+            }
         } else {
             return Response(400)
         }
+//        if (dto is SearchRequest) {
+//            val resp = imdbService.searchSong(dto.expression).execute()
+//
+//            val body = resp.body() ?: Response(resp.code())
+//            body.code = resp.code()
+//
+//            return body
+//
+//        } else {
+//            return Response(400)
+//        }
 
     }
+
 
     private fun isConnected(): Boolean {
 

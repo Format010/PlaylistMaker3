@@ -4,17 +4,17 @@ package com.example.playlistmaker2.search.domain.impl
 import com.example.playlistmaker2.search.data.HistoryRepository
 import com.example.playlistmaker2.search.domain.HistoryInteractor
 import com.example.playlistmaker2.search.domain.model.Track
-import java.util.LinkedList
+
 
 class HistoryInteractorImpl(
     private val repository: HistoryRepository
 ) : HistoryInteractor {
 
-    override fun read(): LinkedList<Track> {
+    override fun read(): List<Track> {
         return repository.read()
     }
 
-    override fun write(searchHistory: LinkedList<Track>) {
+    override fun write(searchHistory: List<Track>) {
         repository.write(searchHistory)
     }
 
@@ -22,7 +22,7 @@ class HistoryInteractorImpl(
         repository.clearSearch()
     }
 
-    override fun addTrackToHistory(searchHistory: LinkedList<Track>, track: Track) {
+    override fun addTrackToHistory(searchHistory: List<Track>, track: Track) {
         repository.addTrackToHistory(searchHistory, track)
     }
 }

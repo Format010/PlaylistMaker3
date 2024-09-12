@@ -19,7 +19,6 @@ import com.example.playlistmaker2.R
 import com.example.playlistmaker2.search.domain.model.Track
 import com.example.playlistmaker2.util.CreatorSearch
 import com.google.gson.Gson
-import java.util.LinkedList
 import androidx.core.widget.addTextChangedListener
 import com.example.playlistmaker2.USER_KEY_HISTORY
 
@@ -31,7 +30,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SearchViewModel
 
-    private val listSong = LinkedList<Track>()
+    private var listSong: List<Track> = emptyList()
     private var textValue: String = TEXT
     lateinit var historyLayout: LinearLayout
     lateinit var inputEditText: EditText
@@ -94,9 +93,10 @@ class SearchActivity : AppCompatActivity() {
             viewModel.searchDebounce(changedText = s?.toString() ?: "")
 
             clearButton.isVisible = !s.isNullOrEmpty()
+            historyLayout.isVisible = if (history.read().isEmpty()) false else true
             historyLayout.isVisible =
                 if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
-            historyLayout.isVisible = if (history.read().isEmpty()) false else true
+
         },
             afterTextChanged = { a: Editable? ->
                 textValue = a.toString()
@@ -113,7 +113,8 @@ class SearchActivity : AppCompatActivity() {
                 val inputMethodManager =
                     this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-                listSong.clear()
+                songAdapter.data = emptyList()
+
                 songAdapter.notifyDataSetChanged()
                 rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
                 if (placeholderMessage2?.isVisible == true) {
@@ -165,8 +166,9 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage2?.visibility = View.GONE
         rvSearch.visibility = View.VISIBLE
 
-        songAdapter.data.clear()
-        songAdapter.data.addAll(song)
+        songAdapter.data = emptyList()
+        //songAdapter.data.clear()
+        songAdapter.data = song
         songAdapter.notifyDataSetChanged()
     }
 

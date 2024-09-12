@@ -11,12 +11,12 @@ import java.util.LinkedList
 class HistoryRepositoryImpl(private val sharedPrefs: SharedPreferences, private val gson: Gson) :
     HistoryRepository {
 
-    override fun read(): LinkedList<Track> {
+    override fun read(): List<Track> {
         val json = sharedPrefs.getString(USER_KEY_HISTORY, null) ?: return LinkedList()
         return gson.fromJson(json, Array<Track>::class.java).toCollection(LinkedList())
     }
 
-    override fun write(searchHistory: LinkedList<Track>) {
+    override fun write(searchHistory: List<Track>) {
         val json = gson.toJson(searchHistory)
         sharedPrefs.edit {
             putString(USER_KEY_HISTORY, json)
@@ -24,16 +24,19 @@ class HistoryRepositoryImpl(private val sharedPrefs: SharedPreferences, private 
     }
 
     override fun clearSearch() {
-        write(LinkedList())
+        write(emptyList())
     }
 
-    override fun addTrackToHistory(searchHistory: LinkedList<Track>, track: Track) {
-        searchHistory.remove(track)
-        searchHistory.addFirst(track)
-        if (searchHistory.count() > 10) {
-            searchHistory.removeLast()
+    override fun addTrackToHistory(searchHistory: List<Track>, track: Track) {
+
+        var listList : LinkedList<Track> = LinkedList(searchHistory)
+        listList.remove(track)
+        listList.addFirst(track)
+        if (listList.count() > 10) {
+            listList.removeLast()
         }
-        write(searchHistory)
+
+        write(listList)
     }
 }
 
