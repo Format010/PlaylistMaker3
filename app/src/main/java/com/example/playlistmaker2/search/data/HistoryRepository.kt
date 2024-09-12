@@ -1,6 +1,8 @@
 package com.example.playlistmaker2.search.data
 
+import android.content.SharedPreferences
 import com.example.playlistmaker2.search.domain.model.Track
+import com.google.gson.Gson
 import java.util.LinkedList
 
 interface HistoryRepository {

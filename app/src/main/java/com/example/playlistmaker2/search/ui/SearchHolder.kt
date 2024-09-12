@@ -1,6 +1,7 @@
 package layout
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -14,10 +15,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker2.AUDIO_PLAYER_DATA
 import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
 import com.example.playlistmaker2.player.ui.AudioPlayerActivity
+import com.example.playlistmaker2.util.CreatorSearch
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class SearchHolder(itemView: View, sharedPrefs: SharedPreferences, gson: Gson) : RecyclerView.ViewHolder(itemView) {
 
     private val artwork: ImageView = itemView.findViewById(R.id.artwork)
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
@@ -26,6 +29,9 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val searchItemConstraint: View = itemView.findViewById(R.id.search_item)
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
+    private val searchHistory = CreatorSearch.provideHistoryInteractor(sharedPrefs, gson)
+
+
 
     fun bind(track: Track) {
 
@@ -46,6 +52,9 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         searchItemConstraint.setOnClickListener {
         if (clickDebounce()) {
+
+            val searchHistoryList = searchHistory.read()
+            searchHistoryList.let { it1 -> searchHistory.addTrackToHistory(it1, track) }
 
             val intent = Intent(it.context, AudioPlayerActivity::class.java)
             intent.putExtra(AUDIO_PLAYER_DATA, track)

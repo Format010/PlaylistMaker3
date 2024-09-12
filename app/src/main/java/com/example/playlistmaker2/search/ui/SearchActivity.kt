@@ -1,8 +1,8 @@
 package com.example.playlistmaker2.search.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -14,38 +14,44 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker2.App
 import com.example.playlistmaker2.EDITED_TEXT
 import com.example.playlistmaker2.R
 import com.example.playlistmaker2.search.domain.model.Track
 import com.example.playlistmaker2.util.CreatorSearch
+import com.google.gson.Gson
 import java.util.LinkedList
+import androidx.core.widget.addTextChangedListener
+import com.example.playlistmaker2.USER_KEY_HISTORY
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        private const val TEXT = " "
+        private const val TEXT = ""
     }
 
     private lateinit var viewModel: SearchViewModel
 
     private val listSong = LinkedList<Track>()
     private var textValue: String = TEXT
-    lateinit var historyLayout : LinearLayout
-    lateinit var inputEditText : EditText
-    lateinit var rvSearch : RecyclerView
-    lateinit var progressBar : View
-    lateinit var songAdapter : SearchAdapter
-    lateinit var clearButton : ImageView
+    lateinit var historyLayout: LinearLayout
+    lateinit var inputEditText: EditText
+    lateinit var rvSearch: RecyclerView
+    lateinit var progressBar: View
+    lateinit var songAdapter: SearchAdapter
+    lateinit var clearButton: ImageView
     private var placeholderMessage: ViewGroup? = null
     private var placeholderMessage2: ViewGroup? = null
-    var history = CreatorSearch.provideHistoryInteractor()
+    private val gson = Gson()
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        viewModel = ViewModelProvider(this,
+        sharedPrefs = getSharedPreferences(USER_KEY_HISTORY, MODE_PRIVATE)
+        val history = CreatorSearch.provideHistoryInteractor(sharedPrefs, gson)
+        viewModel = ViewModelProvider(
+            this,
             SearchViewModel.getViewModelFactory()
         )[SearchViewModel::class.java]
 
@@ -60,14 +66,14 @@ class SearchActivity : AppCompatActivity() {
         inputEditText = findViewById(R.id.input_search)
         rvSearch = findViewById(R.id.searchRecyclerView)
         progressBar = findViewById(R.id.progressBar)
-        songAdapter = SearchAdapter(listSong)
+        songAdapter = SearchAdapter(listSong, sharedPrefs, gson)
         clearButton = findViewById(R.id.clear_text)
         val rvHistory = findViewById<RecyclerView>(R.id.historyRecyclerView)
         val update = findViewById<Button>(R.id.update)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
 
         rvSearch.adapter = songAdapter
-        rvHistory.adapter = SearchAdapter(history.read())
+        rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
         if (history.read().isNotEmpty()) historyLayout.isVisible = true
 
         if (savedInstanceState != null) {
@@ -78,7 +84,23 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText(textValue)
         }
 
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        inputEditText.addTextChangedListener(onTextChanged = { s: CharSequence?, _, _, _ ->
+            if (placeholderMessage2?.isVisible == true) {
+                placeholderMessage2?.isVisible = false
+            }
+            if (placeholderMessage?.isVisible == true) {
+                placeholderMessage?.isVisible = false
+            }
+            viewModel.searchDebounce(changedText = s?.toString() ?: "")
+
+            clearButton.isVisible = !s.isNullOrEmpty()
+            historyLayout.isVisible =
+                if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
+            historyLayout.isVisible = if (history.read().isEmpty()) false else true
+        },
+            afterTextChanged = { a: Editable? ->
+                textValue = a.toString()
+            })
 
         back.setOnClickListener {
             finish()
@@ -93,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
                 listSong.clear()
                 songAdapter.notifyDataSetChanged()
-                rvHistory.adapter = SearchAdapter(history.read())
+                rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
                 if (placeholderMessage2?.isVisible == true) {
                     placeholderMessage2?.isVisible = false
                 }
@@ -113,45 +135,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             history.clearSearch()
-            rvHistory.adapter = SearchAdapter(history.read())
+            rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
             historyLayout.isVisible = false
-        }
-
-
-    }
-
-    private val simpleTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            if (placeholderMessage2?.isVisible == true) {
-                placeholderMessage2?.isVisible = false
-            }
-            if (placeholderMessage?.isVisible == true) {
-                placeholderMessage?.isVisible = false
-            }
-            viewModel.searchDebounce(changedText = s?.toString() ?: "")
-
-
-            clearButton.isVisible = !s.isNullOrEmpty()
-            historyLayout.isVisible =
-                if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
-            historyLayout.isVisible = if (history.read().isEmpty()) false else true
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            textValue = s.toString()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        simpleTextWatcher.let { inputEditText.removeTextChangedListener(it) }
-
-        if (isFinishing) {
-            (this.applicationContext as? App)?.searchViewModel = null
         }
     }
 
@@ -165,12 +150,13 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showEmpty() {
         progressBar.visibility = View.GONE
+        placeholderMessage2?.visibility = View.GONE
         placeholderMessage?.visibility = View.VISIBLE
     }
 
     private fun showError() {
         progressBar.visibility = View.GONE
-        placeholderMessage2?.visibility = View.GONE
+        placeholderMessage2?.visibility = View.VISIBLE
     }
 
     private fun showContent(song: List<Track>) {

@@ -11,9 +11,11 @@ open class SearchInteractorImpl(private val repository: SearchRepository) : Sear
 
     override fun searchMusic(expression: String, consumer: SearchInteractor.MusicConsumer) {
         executor.execute {
-            when(val resource = repository.searchMusic(expression)) {
+            when (val resource = repository.searchMusic(expression)) {
                 is Resource.Success -> consumer.consume(resource.data, null)
-                is Resource.Error -> { consumer.consume(null, resource.message)}
+                is Resource.Error -> {
+                    consumer.consume(null, resource.message)
+                }
             }
         }
     }

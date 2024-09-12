@@ -2,11 +2,14 @@ package com.example.playlistmaker2.search.ui
 
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,8 +33,11 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+    //Передаем в RetrofitNetworkClient для функции которая узнает есть ли подключение к интернету
+    private val connectivityManager = application.getSystemService(
+                Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    private val musicInteractor = CreatorSearch.provideMusicInteractor(getApplication<Application>())
+    private val musicInteractor = CreatorSearch.provideMusicInteractor(connectivityManager)
     private var latestSearchText: String? = null
     private val stateLiveData = MutableLiveData<SearchState>()
 
@@ -79,6 +85,13 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             "Not connect internet" -> {
                 renderState(SearchState.Error)
 
+            }
+            "Ошибка сервера" -> {
+
+                renderState(SearchState.Empty)
+            }
+            "404" ->{
+                renderState(SearchState.Empty)
             }
         }
     }

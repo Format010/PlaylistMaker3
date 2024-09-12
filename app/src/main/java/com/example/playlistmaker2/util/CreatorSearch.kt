@@ -1,6 +1,7 @@
 package com.example.playlistmaker2.util
 
-import android.content.Context
+import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import com.example.playlistmaker2.search.data.HistoryRepository
 import com.example.playlistmaker2.search.data.SearchRepository
 import com.example.playlistmaker2.search.data.impl.HistoryRepositoryImpl
@@ -10,22 +11,23 @@ import com.example.playlistmaker2.search.domain.HistoryInteractor
 import com.example.playlistmaker2.search.domain.SearchInteractor
 import com.example.playlistmaker2.search.domain.impl.HistoryInteractorImpl
 import com.example.playlistmaker2.search.domain.impl.SearchInteractorImpl
+import com.google.gson.Gson
 
 object CreatorSearch {
 
-    private fun getMusicRepository(context: Context): SearchRepository {
-        return SearchRepositoryImpl(RetrofitNetworkClient(context))
+    private fun getMusicRepository(connectivityManager: ConnectivityManager): SearchRepository {
+        return SearchRepositoryImpl(RetrofitNetworkClient(connectivityManager))
     }
 
-    fun provideMusicInteractor(context: Context): SearchInteractor {
-        return SearchInteractorImpl(getMusicRepository(context))
+    fun provideMusicInteractor(connectivityManager: ConnectivityManager): SearchInteractor {
+        return SearchInteractorImpl(getMusicRepository(connectivityManager))
     }
 
-    private fun getHistoryRepository() : HistoryRepository {
-        return HistoryRepositoryImpl()
+    private fun getHistoryRepository(sharedPrefs: SharedPreferences, gson: Gson) : HistoryRepository {
+        return HistoryRepositoryImpl(sharedPrefs, gson)
     }
 
-    fun provideHistoryInteractor(): HistoryInteractor {
-        return HistoryInteractorImpl(getHistoryRepository())
+    fun provideHistoryInteractor(sharedPrefs: SharedPreferences, gson: Gson): HistoryInteractor {
+        return HistoryInteractorImpl(getHistoryRepository(sharedPrefs, gson))
     }
 }
