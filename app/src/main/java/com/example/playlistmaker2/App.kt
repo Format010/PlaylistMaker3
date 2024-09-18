@@ -1,26 +1,39 @@
 package com.example.playlistmaker2
 
 import android.app.Application
-import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker2.util.CreatorSharing
 
 const val NAME_SHARED_FILE = "settings"
-const val SECRET_KEY = "wd"
+private const val SECRET_KEY = "wd"
+const val USER_KEY_HISTORY = "history_save"
+const val CLICK_DEBOUNCE_DELAY = 1000L
+const val AUDIO_PLAYER_DATA = "track"
+const val SEARCH_DEBOUNCE_DELAY = 2000L
+const val EDITED_TEXT = "KEY"
+const val HISTORY_KEY = "wd"
+
 
 class App: Application() {
 
-    var darkTheme = false
+    private var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
+
         val sharedPrefs = getSharedPreferences(NAME_SHARED_FILE, MODE_PRIVATE)
-        if (isDarkThemeOn()) {
-            darkTheme = sharedPrefs.getBoolean(SECRET_KEY, true)
-        }else {darkTheme = sharedPrefs.getBoolean(SECRET_KEY, false)}
+        CreatorSharing.initApplication(this)
+        CreatorSharing.initialize(sharedPrefs)
+
+        darkTheme = if (checkDarkThemeOnDevice()) sharedPrefs.getBoolean(SECRET_KEY, true)
+        else sharedPrefs.getBoolean(SECRET_KEY, false)
+
         switchTheme(darkTheme)
+
     }
-    fun switchTheme(darkThemeEnabled: Boolean) {
+
+    private fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
@@ -30,5 +43,7 @@ class App: Application() {
             }
         )
     }
-    fun Context.isDarkThemeOn() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+    private fun checkDarkThemeOnDevice() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
 }
