@@ -3,9 +3,12 @@ package com.example.playlistmaker2
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker2.util.CreatorSharing
-
-const val NAME_SHARED_FILE = "settings"
+import audioPlayerModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import searchModule
+import settingsModule
+const val SHARED_PREF_SETTINGS = "settings"
 private const val SECRET_KEY = "wd"
 const val USER_KEY_HISTORY = "history_save"
 const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -22,13 +25,14 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(NAME_SHARED_FILE, MODE_PRIVATE)
-        CreatorSharing.initApplication(this)
-        CreatorSharing.initialize(sharedPrefs)
+        startKoin {
+            androidContext(this@App)
+            modules(searchModule, settingsModule, audioPlayerModule)
+        }
 
+        val sharedPrefs = getSharedPreferences(SHARED_PREF_SETTINGS, MODE_PRIVATE)
         darkTheme = if (checkDarkThemeOnDevice()) sharedPrefs.getBoolean(SECRET_KEY, true)
         else sharedPrefs.getBoolean(SECRET_KEY, false)
-
         switchTheme(darkTheme)
 
     }

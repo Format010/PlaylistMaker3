@@ -3,15 +3,13 @@ package com.example.playlistmaker2.settings.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker2.R
 import com.example.playlistmaker2.sharing.domain.model.EmailData
-import com.example.playlistmaker2.util.CreatorSharing
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel by viewModel<SettingsViewModel>()
     private lateinit var themeSwitcher: SwitchMaterial
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         val userAgreement = findViewById<View>(R.id.buttonUserAgr)
         themeSwitcher = findViewById(R.id.themeSwitcher)
 
-        val factory = SettingsViewModel.getViewModelFactory(
-            CreatorSharing.provideSettingsInteractor(),
-            CreatorSharing.provideSharingInteractor()
-        )
-        viewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
         viewModel.settingsState().observe(this) {
             state ->
             handleSettingsState(state)

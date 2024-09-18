@@ -5,8 +5,6 @@ import androidx.core.content.edit
 import com.example.playlistmaker2.HISTORY_KEY
 import com.example.playlistmaker2.settings.data.SettingsRepository
 
-
-
 class SettingsRepositoryImpl(private val sharedPrefs : SharedPreferences) : SettingsRepository {
 
     override fun getThemeSettings(): Boolean {

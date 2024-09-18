@@ -29,13 +29,12 @@ class HistoryRepositoryImpl(private val sharedPrefs: SharedPreferences, private 
 
     override fun addTrackToHistory(searchHistory: List<Track>, track: Track) {
 
-        var listList : LinkedList<Track> = LinkedList(searchHistory)
+        val listList : LinkedList<Track> = LinkedList(searchHistory)
         listList.remove(track)
         listList.addFirst(track)
         if (listList.count() > 10) {
             listList.removeLast()
         }
-
         write(listList)
     }
 }

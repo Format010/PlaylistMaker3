@@ -1,9 +1,5 @@
 package layout
 
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,26 +8,16 @@ import com.example.playlistmaker2.R
 import com.example.playlistmaker2.search.domain.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker2.AUDIO_PLAYER_DATA
-import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
-import com.example.playlistmaker2.player.ui.AudioPlayerActivity
-import com.example.playlistmaker2.util.CreatorSearch
-import com.google.gson.Gson
+import com.example.playlistmaker2.search.ui.SearchAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class SearchHolder(itemView: View, sharedPrefs: SharedPreferences, gson: Gson) : RecyclerView.ViewHolder(itemView) {
+class SearchHolder(itemView: View, private val listenerItem: SearchAdapter.OnClickListenerItem) : RecyclerView.ViewHolder(itemView) {
 
     private val artwork: ImageView = itemView.findViewById(R.id.artwork)
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
-    private val searchItemConstraint: View = itemView.findViewById(R.id.search_item)
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchHistory = CreatorSearch.provideHistoryInteractor(sharedPrefs, gson)
-
-
 
     fun bind(track: Track) {
 
@@ -50,25 +36,10 @@ class SearchHolder(itemView: View, sharedPrefs: SharedPreferences, gson: Gson) :
             ).format(track.trackTimeMillis.toLong())
         } else trackTime.text = SimpleDateFormat().format(0)
 
-        searchItemConstraint.setOnClickListener {
-        if (clickDebounce()) {
-
-            val searchHistoryList = searchHistory.read()
-            searchHistoryList.let { it1 -> searchHistory.addTrackToHistory(it1, track) }
-
-            val intent = Intent(it.context, AudioPlayerActivity::class.java)
-            intent.putExtra(AUDIO_PLAYER_DATA, track)
-            it.context.startActivity(intent)
-            }
+        itemView.setOnClickListener {
+            listenerItem.onItemClick(track)
         }
     }
 
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
+
 }

@@ -1,8 +1,10 @@
 package com.example.playlistmaker2.player.domain.models
 
-data class AudioPlayerUiState(
-    var currentPosition: Int = 0,
-    var isPlaying: Boolean = false,
-    var audioPlayerStateStatus: AudioPlayerStateStatus? = AudioPlayerStateStatus.STATE_DEFAULT,
+import android.media.MediaPlayer.OnCompletionListener
 
+data class AudioPlayerUiState(
+    val currentPosition: Int = 0,
+    val isPlaying: Boolean = false,
+    val audioPlayerStateStatus: AudioPlayerStateStatus? = AudioPlayerStateStatus.DEFAULT,
+    val onCompletionListener: Boolean = false,
     )
