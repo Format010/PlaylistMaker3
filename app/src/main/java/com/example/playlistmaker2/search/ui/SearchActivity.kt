@@ -103,6 +103,7 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.isVisible = true
             songAdapter.data = emptyList()
             songAdapter.notifyDataSetChanged()
+            historyAdapter.data = viewModel.historyRead()
             }
         },
             afterTextChanged = { a: Editable? ->
@@ -207,6 +208,7 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(playerIntent)
             }
         }
+
     }
 
     private fun render(state: SearchState) {

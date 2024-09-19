@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/set_marginTop140"
         android:layout_gravity="center"
-        android:indeterminateTint="@color/yp_blue_progress_bar"
+        android:indeterminateTint="@color/yp_blue"
         android:visibility="gone"/>
 
     <LinearLayout
