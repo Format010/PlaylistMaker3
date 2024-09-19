@@ -9,9 +9,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AudioPlayerRepositoryImpl: AudioPlayerRepository {
+class AudioPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer?): AudioPlayerRepository {
 
-    private var mediaPlayer: MediaPlayer? = null
+
     private val playerScope = CoroutineScope(Dispatchers.Main + Job())
     private var endSong = false
 

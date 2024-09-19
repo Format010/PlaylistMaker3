@@ -1,5 +1,5 @@
 import android.app.Application.MODE_PRIVATE
-import com.example.playlistmaker2.SHARED_PREF_SETTINGS
+import com.example.playlistmaker2.SECRET_KEY
 import com.example.playlistmaker2.settings.data.SettingsRepository
 import com.example.playlistmaker2.settings.data.impl.SettingsRepositoryImpl
 import com.example.playlistmaker2.settings.domain.SettingsInteractor
@@ -13,6 +13,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+
 val settingsModule = module {
 
     single<SettingsInteractor> {
@@ -25,7 +26,7 @@ val settingsModule = module {
 
     single {
         androidContext()
-            .getSharedPreferences(SHARED_PREF_SETTINGS, MODE_PRIVATE)
+            .getSharedPreferences(SECRET_KEY, MODE_PRIVATE)
     }
 
     single<SettingsRepository> {

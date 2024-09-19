@@ -99,7 +99,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
         viewModel.pause()
     }
 
-    fun formatTime(formatTime: String): String {
+    private fun formatTime(formatTime: String): String {
         return SimpleDateFormat(
             "mm:ss",
             Locale.getDefault()

@@ -1,4 +1,5 @@
 
+import android.media.MediaPlayer
 import com.example.playlistmaker2.player.data.AudioPlayerRepository
 import com.example.playlistmaker2.player.data.impl.AudioPlayerRepositoryImpl
 import com.example.playlistmaker2.player.domain.AudioPlayerInteractor
@@ -13,8 +14,12 @@ val audioPlayerModule = module {
         AudioPlayerInteractorImpl(get())
     }
 
+    factory<MediaPlayer?> {
+        MediaPlayer()
+    }
+
     single<AudioPlayerRepository> {
-        AudioPlayerRepositoryImpl()
+        AudioPlayerRepositoryImpl(get())
     }
 
     viewModel { (url: String) ->

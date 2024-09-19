@@ -98,12 +98,16 @@ class SearchActivity : AppCompatActivity() {
 
             clearButton.isVisible = !s.isNullOrEmpty()
             historyLayout.isVisible = viewModel.historyRead().isNotEmpty()
-            historyLayout.isVisible =
-                /*inputEditText.hasFocus() &&*/ s?.isEmpty() == true //при повороте экрана делается фокус на строку ввода текста, как этого избежать не знаю
 
+            if (inputEditText.hasFocus() && s?.isEmpty() == true){
+            historyLayout.isVisible = true
+            songAdapter.data = emptyList()
+            songAdapter.notifyDataSetChanged()
+            }
         },
             afterTextChanged = { a: Editable? ->
                 textValue = a.toString()
+
             })
 
         back.setOnClickListener {

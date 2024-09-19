@@ -12,6 +12,7 @@
         <item name="colorOnSecondary">@color/yp_grey</item>
         <item name="android:textColorHint">@color/yp_grey</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+         <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 </resources>

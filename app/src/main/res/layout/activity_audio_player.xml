@@ -2,6 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorSecondary"
+    android:theme="@style/colorBarWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".player.ui.AudioPlayerActivity">
@@ -115,11 +117,13 @@
     <TextView
         android:id="@+id/track_time_mills_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginStart="@dimen/set_size24"
+        android:layout_marginTop="@dimen/set_size30"
         android:fontFamily="@font/ys_text_regular"
-        android:textSize="@dimen/set_textSize13"
         android:text="@string/track_time"
+        android:textSize="@dimen/set_textSize13"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/collection_name_area"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="trackTimeMillsTag"
@@ -128,11 +132,12 @@
     <TextView
         android:id="@+id/collection_name_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginStart="@dimen/set_size24"
         android:fontFamily="@font/ys_text_regular"
         android:text="@string/collection_name"
         android:textSize="@dimen/set_textSize13"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/release_date_area"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="collectionNameTag"
@@ -141,11 +146,12 @@
     <TextView
         android:id="@+id/release_date_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginStart="@dimen/set_size24"
         android:text="@string/release_date"
         android:fontFamily="@font/ys_text_regular"
         android:textSize="@dimen/set_textSize13"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/primary_genre_name_area"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="releaseDateTag"
@@ -154,11 +160,12 @@
     <TextView
         android:id="@+id/primary_genre_name_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginStart="@dimen/set_size24"
         android:text="@string/primary_genre_name"
         android:fontFamily="@font/ys_text_regular"
         android:textSize="@dimen/set_textSize13"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/country_area"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="primaryGenreNameTag"
@@ -167,11 +174,12 @@
     <TextView
         android:id="@+id/country_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginStart="@dimen/set_size24"
         android:text="@string/country"
         android:fontFamily="@font/ys_text_regular"
         android:textSize="@dimen/set_textSize13"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="countryTag"
@@ -187,77 +195,87 @@
     <TextView
         android:id="@+id/track_time_mills"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_size24"
         android:ellipsize="end"
         android:fontFamily="@font/ys_text_regular"
         android:maxLines="1"
         android:text="@string/track_time"
         android:textAlignment="textEnd"
+        android:gravity="center"
         android:textSize="@dimen/set_textSize13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texts_barrier"
-        app:layout_constraintTop_toTopOf="@+id/track_time_mills_area" />
+        app:layout_constraintTop_toTopOf="@+id/track_time_mills_area"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/collection_name"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_size24"
         android:ellipsize="end"
         android:fontFamily="@font/ys_text_regular"
         android:maxLines="1"
         android:text="@string/collection_name"
         android:textAlignment="textEnd"
+        android:gravity="center"
         android:textSize="@dimen/set_textSize13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texts_barrier"
-        app:layout_constraintTop_toTopOf="@+id/collection_name_area" />
+        app:layout_constraintTop_toTopOf="@+id/collection_name_area"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/release_date"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_size24"
         android:ellipsize="end"
         android:fontFamily="@font/ys_text_regular"
         android:maxLines="1"
         android:text="@string/release_date"
         android:textAlignment="textEnd"
+        android:gravity="center"
         android:textSize="@dimen/set_textSize13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texts_barrier"
-        app:layout_constraintTop_toTopOf="@+id/release_date_area" />
+        app:layout_constraintTop_toTopOf="@+id/release_date_area"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/primary_genre_game"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_size24"
         android:ellipsize="end"
         android:fontFamily="@font/ys_text_regular"
         android:maxLines="1"
         android:text="@string/primary_genre_name"
         android:textAlignment="textEnd"
+        android:gravity="center"
         android:textSize="@dimen/set_textSize13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texts_barrier"
-        app:layout_constraintTop_toTopOf="@+id/primary_genre_name_area" />
+        app:layout_constraintTop_toTopOf="@+id/primary_genre_name_area"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/country"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_size24"
         android:ellipsize="end"
         android:fontFamily="@font/ys_text_regular"
         android:maxLines="1"
         android:text="@string/country"
         android:textAlignment="textEnd"
+        android:gravity="center"
         android:textSize="@dimen/set_textSize13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texts_barrier"
-        app:layout_constraintTop_toTopOf="@+id/country_area" />
+        app:layout_constraintTop_toTopOf="@+id/country_area"
+        tools:ignore="RtlCompat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

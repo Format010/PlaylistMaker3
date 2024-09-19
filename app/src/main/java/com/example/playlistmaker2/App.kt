@@ -3,20 +3,19 @@ package com.example.playlistmaker2
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import audioPlayerModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import searchModule
 import settingsModule
-const val SHARED_PREF_SETTINGS = "settings"
-private const val SECRET_KEY = "wd"
+
+const val SECRET_KEY = "wd"
 const val USER_KEY_HISTORY = "history_save"
 const val CLICK_DEBOUNCE_DELAY = 1000L
 const val AUDIO_PLAYER_DATA = "track"
 const val SEARCH_DEBOUNCE_DELAY = 2000L
 const val EDITED_TEXT = "KEY"
-const val HISTORY_KEY = "wd"
-
 
 class App: Application() {
 
@@ -30,11 +29,13 @@ class App: Application() {
             modules(searchModule, settingsModule, audioPlayerModule)
         }
 
-        val sharedPrefs = getSharedPreferences(SHARED_PREF_SETTINGS, MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences(SECRET_KEY, MODE_PRIVATE)
         darkTheme = if (checkDarkThemeOnDevice()) sharedPrefs.getBoolean(SECRET_KEY, true)
         else sharedPrefs.getBoolean(SECRET_KEY, false)
         switchTheme(darkTheme)
-
+        sharedPrefs.edit {
+            putBoolean(SECRET_KEY, darkTheme)
+        }
     }
 
     private fun switchTheme(darkThemeEnabled: Boolean) {
