@@ -10,7 +10,9 @@
     <dimen name="set_size26">26dp</dimen>
     <dimen name="set_size30">30dp</dimen>
     <dimen name="set_size32">32dp</dimen>
+    <dimen name="set_size46">46dp</dimen>
     <dimen name="set_size62">62dp</dimen>
+    <dimen name="set_size106">106dp</dimen>
     <dimen name="set_textSize16">16sp</dimen>
     <dimen name="set_textSize19">19sp</dimen>
     <dimen name="set_textSize11">11sp</dimen>

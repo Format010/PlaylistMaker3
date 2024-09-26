@@ -28,5 +28,11 @@
     <string name="release_date">Год</string>
     <string name="primary_genre_name">Жанр</string>
     <string name="country">Страна</string>
+    <string name="favorite_text_null">Ваша медиатека пуста</string>
+    <string name="playlist_null">Вы не создали \n ни одного плейлиста</string>
+    <string name="button_add_playlist">Новый плейлист</string>
+    <string name="tab_layout">Вкладки</string>
+    <string name="favorite_track">Избранные треки</string>
+    <string name="playlist">Плейлисты</string>
 
 </resources>
