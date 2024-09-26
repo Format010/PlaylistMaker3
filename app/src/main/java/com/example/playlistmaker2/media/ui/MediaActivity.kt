@@ -8,13 +8,12 @@ import com.example.playlistmaker2.R
 
 class MediaActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMediaBinding
-    private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMediaBinding.inflate(layoutInflater)
+        val binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.back.setOnClickListener {
@@ -30,11 +29,11 @@ class MediaActivity : AppCompatActivity() {
                 else -> tab.text = getString(R.string.playlist)
             }
         }
-        tabMediator.attach()
+        tabMediator?.attach()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        tabMediator.detach()
+        tabMediator?.detach()
     }
 }

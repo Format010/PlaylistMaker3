@@ -17,9 +17,5 @@ class MediaNumbersViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: 
             0 -> MediaFavoriteTrackFragment.newInstance()
             else -> MediaPlaylistFragment.newInstance()
         }
-
-
-    //FavoriteTrackFragment.newInstance(position + 1)
-
     }
 }

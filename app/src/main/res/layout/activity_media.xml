@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+    android:background="?attr/colorSecondary">
 
     <Button
         android:id="@+id/back"
@@ -27,10 +27,10 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSecondary"
         android:contentDescription="@string/tab_layout"
         app:layout_constraintTop_toBottomOf="@+id/back"
-        app:tabTextColor="@color/black"
+        app:tabTextColor="?attr/colorPrimaryVariant"
         tools:layout_editor_absoluteX="0dp" />
 
     <androidx.viewpager2.widget.ViewPager2
