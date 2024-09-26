@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker2.settings.domain.SettingsInteractor
 import com.example.playlistmaker2.sharing.domain.SharingInteractor
 import com.example.playlistmaker2.sharing.domain.model.EmailData
@@ -12,21 +11,7 @@ import com.example.playlistmaker2.sharing.domain.model.EmailData
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val sharingInteractor: SharingInteractor,
-
 ) : ViewModel() {
-
-    companion object {
-        fun getViewModelFactory(settingsInteractor: SettingsInteractor, sharingInteractor: SharingInteractor, ): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                // 1
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SettingsViewModel(
-                        settingsInteractor, sharingInteractor,
-                    ) as T
-                }
-            }
-    }
 
     private val settingsState = MutableLiveData<SettingsState>()
     fun settingsState(): LiveData<SettingsState> = settingsState

@@ -1,10 +1,6 @@
 package com.example.playlistmaker2.search.ui
 
-
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -12,38 +8,36 @@ import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker2.SEARCH_DEBOUNCE_DELAY
+import com.example.playlistmaker2.search.domain.HistoryInteractor
 import com.example.playlistmaker2.search.domain.SearchInteractor
 import com.example.playlistmaker2.search.domain.model.Track
-import com.example.playlistmaker2.util.CreatorSearch
 
-
-class SearchViewModel(application: Application): AndroidViewModel(application) {
+class SearchViewModel(application: Application, private val searchInteractor: SearchInteractor, private val historyInteractor: HistoryInteractor): AndroidViewModel(application) {
 
     companion object {
         val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
     }
-    //Передаем ConnectivityManager в RetrofitNetworkClient для функции которая узнает есть ли подключение к интернету
-    private val connectivityManager = application.getSystemService(
-                Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    private val musicInteractor = CreatorSearch.provideMusicInteractor(connectivityManager)
     private var latestSearchText: String? = null
-    private val stateLiveData = MutableLiveData<SearchState>()
+
+    private val _stateLiveData = MutableLiveData<SearchState>()
+    val stateLiveData: LiveData<SearchState> = _stateLiveData
+
+    private val _historyList = MutableLiveData<List<Track>>()
+    val historyList: LiveData<List<Track>> = _historyList
 
     var listSong: List<Track> = emptyList()
     val handler = Handler(Looper.getMainLooper())
 
-    fun observeState(): LiveData<SearchState> = stateLiveData
+    init {
+        getHistoryListLiveData()
+    }
+
+    fun getHistoryListLiveData(){
+        _historyList.postValue(historyRead())
+    }
+
 
     fun searchMusicFun(newSearchText: String) {
 
@@ -51,7 +45,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
             renderState(SearchState.Loading)
 
-            musicInteractor.searchMusic(
+            searchInteractor.searchMusic(
                 newSearchText,
                 object : SearchInteractor.MusicConsumer {
                     override fun consume(foundMusic: List<Track>?, errorMessage: String?) {
@@ -118,12 +112,29 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         listSong = emptyList()
     }
 
+    fun historyRead(): List<Track> {
+        return historyInteractor.read()
+    }
+
+    fun historyWrite(searchHistory: List<Track>){
+        historyInteractor.write(searchHistory)
+    }
+
+    fun historyClear(){
+        historyInteractor.clearSearch()
+    }
+
+    fun historyAdd(searchHistory: List<Track>, track: Track){
+        historyInteractor.addTrackToHistory(searchHistory, track)
+    }
+
+
     override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
     private fun renderState(state: SearchState) {
-        stateLiveData.postValue(state)
+        _stateLiveData.postValue(state)
     }
 
 }

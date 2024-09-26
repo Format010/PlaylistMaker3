@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker2.AUDIO_PLAYER_DATA
@@ -13,14 +12,18 @@ import com.example.playlistmaker2.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker2.player.domain.models.AudioPlayerStateStatus
 import com.example.playlistmaker2.player.domain.models.AudioPlayerUiState
 import com.example.playlistmaker2.search.domain.model.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity() : AppCompatActivity() {
 
     private var url: String? = null
-    private lateinit var viewModel: AudioPlayerViewModel
     private lateinit var binding: ActivityAudioPlayerBinding
+    private val viewModel by viewModel<AudioPlayerViewModel>() {
+        parametersOf(url)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +45,6 @@ class AudioPlayerActivity() : AppCompatActivity() {
         url = track?.previewUrl
         binding.artistName.text = track?.artistName
         binding.trackName.text = track?.trackName
-
-        viewModel = ViewModelProvider(
-            this,
-            AudioPlayerViewModel.getViewModelFactory(url)
-        )[AudioPlayerViewModel::class.java]
 
         viewModel.getPlayerState.observe(this) { uiState ->
             updateUi(uiState)
@@ -84,13 +82,16 @@ class AudioPlayerActivity() : AppCompatActivity() {
     }
 
     private fun updateUi(uiState: AudioPlayerUiState) {
-        if (uiState.audioPlayerStateStatus == AudioPlayerStateStatus.STATE_PLAYING || uiState.audioPlayerStateStatus == AudioPlayerStateStatus.STATE_PAUSED) binding.timing.text =
+        if (uiState.audioPlayerStateStatus == AudioPlayerStateStatus.PLAYING || uiState.audioPlayerStateStatus == AudioPlayerStateStatus.PAUSED) binding.timing.text =
             formatTime(uiState.currentPosition.toString()) else binding.timing.text =
             formatTime("0")
-        if (uiState.audioPlayerStateStatus == AudioPlayerStateStatus.STATE_DEFAULT) viewModel.preparedPlayer()
+        if (uiState.audioPlayerStateStatus == AudioPlayerStateStatus.DEFAULT) viewModel.preparedPlayer()
         if (uiState.isPlaying) binding.play.setImageResource(R.drawable.pause) else binding.play.setImageResource(
             R.drawable.play
         )
+        if (uiState.onCompletionListener) {
+            viewModel.endSong()
+        }
     }
 
     override fun onPause() {
@@ -98,7 +99,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
         viewModel.pause()
     }
 
-    fun formatTime(formatTime: String): String {
+    private fun formatTime(formatTime: String): String {
         return SimpleDateFormat(
             "mm:ss",
             Locale.getDefault()

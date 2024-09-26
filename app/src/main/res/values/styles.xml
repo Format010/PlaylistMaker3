@@ -48,4 +48,9 @@
         <item name="android:textFontWeight">300</item>
         <item name="cornerRadius">@dimen/set_size20</item>
     </style>
+
+    <style name="colorBarWhite" parent="@style/Base.Theme.PlaylistMaker">
+             <item name="android:statusBarColor">?attr/colorSecondary</item>
+    </style>
+
 </resources>

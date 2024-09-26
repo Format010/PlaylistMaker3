@@ -1,7 +1,9 @@
 package com.example.playlistmaker2.search.ui
 
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.view.View
 import android.view.ViewGroup
@@ -12,49 +14,42 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker2.EDITED_TEXT
 import com.example.playlistmaker2.R
 import com.example.playlistmaker2.search.domain.model.Track
-import com.example.playlistmaker2.util.CreatorSearch
-import com.google.gson.Gson
 import androidx.core.widget.addTextChangedListener
-import com.example.playlistmaker2.USER_KEY_HISTORY
+import com.example.playlistmaker2.AUDIO_PLAYER_DATA
+import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
+import com.example.playlistmaker2.player.ui.AudioPlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val TEXT = ""
     }
-
-    private lateinit var viewModel: SearchViewModel
-
+    private val viewModel by viewModel<SearchViewModel>()
     private var listSong: List<Track> = emptyList()
     private var textValue: String = TEXT
-    lateinit var historyLayout: LinearLayout
-    lateinit var inputEditText: EditText
-    lateinit var rvSearch: RecyclerView
-    lateinit var progressBar: View
-    lateinit var songAdapter: SearchAdapter
-    lateinit var clearButton: ImageView
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var historyLayout: LinearLayout
+    private lateinit var inputEditText: EditText
+    private lateinit var rvSearch: RecyclerView
+    private lateinit var progressBar: View
+    private lateinit var songAdapter: SearchAdapter
+    private lateinit var rvHistory: RecyclerView
+    private lateinit var historyAdapter: SearchAdapter
+    private lateinit var clearButton: ImageView
     private var placeholderMessage: ViewGroup? = null
     private var placeholderMessage2: ViewGroup? = null
-    private val gson = Gson()
-    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        sharedPrefs = getSharedPreferences(USER_KEY_HISTORY, MODE_PRIVATE)
-        val history = CreatorSearch.provideHistoryInteractor(sharedPrefs, gson)
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-
-        viewModel.observeState().observe(this) {
+        viewModel.stateLiveData.observe(this) {
             render(it)
         }
 
@@ -63,17 +58,26 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage2 = findViewById(R.id.placeholder_message2)
         historyLayout = findViewById(R.id.history_layout)
         inputEditText = findViewById(R.id.input_search)
-        rvSearch = findViewById(R.id.searchRecyclerView)
         progressBar = findViewById(R.id.progressBar)
-        songAdapter = SearchAdapter(listSong, sharedPrefs, gson)
         clearButton = findViewById(R.id.clear_text)
-        val rvHistory = findViewById<RecyclerView>(R.id.historyRecyclerView)
+        rvSearch = findViewById(R.id.searchRecyclerView)
+        rvHistory = findViewById(R.id.historyRecyclerView)
+
+        init() //Инициализация добавления трека в историю и переход в плеер
+
+        rvSearch.adapter = songAdapter
+        rvHistory.adapter = historyAdapter
         val update = findViewById<Button>(R.id.update)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
 
-        rvSearch.adapter = songAdapter
-        rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
-        if (history.read().isNotEmpty()) historyLayout.isVisible = true
+
+        viewModel.historyList.observe(this){
+                historyList ->
+                historyAdapter.data = historyList
+                rvHistory.adapter = historyAdapter
+                historyAdapter.notifyDataSetChanged()
+                if (historyList.isNotEmpty()) historyLayout.isVisible = true
+        }
 
         if (savedInstanceState != null) {
             textValue = savedInstanceState.getString(
@@ -93,13 +97,18 @@ class SearchActivity : AppCompatActivity() {
             viewModel.searchDebounce(changedText = s?.toString() ?: "")
 
             clearButton.isVisible = !s.isNullOrEmpty()
-            historyLayout.isVisible = if (history.read().isEmpty()) false else true
-            historyLayout.isVisible =
-                if (inputEditText.hasFocus() && s?.isEmpty() == true) true else false
+            historyLayout.isVisible = viewModel.historyRead().isNotEmpty()
 
+            if (inputEditText.hasFocus() && s?.isEmpty() == true){
+            historyLayout.isVisible = true
+            songAdapter.data = emptyList()
+            songAdapter.notifyDataSetChanged()
+            historyAdapter.data = viewModel.historyRead()
+            }
         },
             afterTextChanged = { a: Editable? ->
                 textValue = a.toString()
+
             })
 
         back.setOnClickListener {
@@ -114,9 +123,9 @@ class SearchActivity : AppCompatActivity() {
                     this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
                 songAdapter.data = emptyList()
-
                 songAdapter.notifyDataSetChanged()
-                rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
+                historyAdapter.data = viewModel.historyRead()
+                historyAdapter.notifyDataSetChanged()
                 if (placeholderMessage2?.isVisible == true) {
                     placeholderMessage2?.isVisible = false
                 }
@@ -135,10 +144,12 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            history.clearSearch()
-            rvHistory.adapter = SearchAdapter(history.read(), sharedPrefs, gson)
+            viewModel.historyClear()
+            historyAdapter.data = viewModel.historyRead()
             historyLayout.isVisible = false
         }
+
+
     }
 
     private fun showLoading() {
@@ -167,9 +178,37 @@ class SearchActivity : AppCompatActivity() {
         rvSearch.visibility = View.VISIBLE
 
         songAdapter.data = emptyList()
-        //songAdapter.data.clear()
         songAdapter.data = song
         songAdapter.notifyDataSetChanged()
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun init() {
+        historyAdapter = SearchAdapter(viewModel.historyRead()){
+            if (clickDebounce()) {
+                val playerIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
+                startActivity(playerIntent)
+            }
+        }
+
+        songAdapter = SearchAdapter(listSong){
+            if (clickDebounce()) {
+                viewModel.historyAdd(viewModel.historyRead(), it)
+                val playerIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
+                startActivity(playerIntent)
+            }
+        }
+
     }
 
     private fun render(state: SearchState) {
