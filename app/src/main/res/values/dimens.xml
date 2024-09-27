@@ -6,6 +6,7 @@
     <dimen name="buttonBackXY">0dp</dimen>
     <dimen name="layout_width_0">0dp</dimen>
     <dimen name="buttonBack">48dp</dimen>
+    <dimen name="set_size2">2dp</dimen>
     <dimen name="set_size20">20dp</dimen>
     <dimen name="set_size26">26dp</dimen>
     <dimen name="set_size30">30dp</dimen>
