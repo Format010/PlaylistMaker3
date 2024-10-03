@@ -1,28 +1,41 @@
 package com.example.playlistmaker2.settings.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker2.R
+import com.example.playlistmaker2.databinding.FragmentSettingsBinding
 import com.example.playlistmaker2.sharing.domain.model.EmailData
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
+
+    private lateinit var binding: FragmentSettingsBinding
     private val viewModel by viewModel<SettingsViewModel>()
     private lateinit var themeSwitcher: SwitchMaterial
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        val back = findViewById<View>(R.id.back)
-        val share = findViewById<View>(R.id.buttonShare)
-        val support = findViewById<View>(R.id.buttonMailToSupport)
-        val userAgreement = findViewById<View>(R.id.buttonUserAgr)
-        themeSwitcher = findViewById(R.id.themeSwitcher)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.settingsState().observe(this) {
-            state ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val share = binding.buttonShare
+        val support = binding.buttonMailToSupport
+        val userAgreement = binding.buttonUserAgr
+        themeSwitcher = binding.themeSwitcher
+
+        viewModel.settingsState().observe(viewLifecycleOwner) {
+                state ->
             handleSettingsState(state)
         }
 
@@ -32,22 +45,20 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.shareApp(getString(R.string.messageShare))
         }
 
-        back.setOnClickListener{
-            finish()
-        }
-
         support.setOnClickListener{
             val dataSupport = EmailData(
-            getString(R.string.subjectMailto),
-            getString(R.string.bodyMailto),
-            getString(R.string.emailMailto))
+                getString(R.string.subjectMailto),
+                getString(R.string.bodyMailto),
+                getString(R.string.emailMailto))
             viewModel.contactSupport(dataSupport)
         }
 
         userAgreement.setOnClickListener{
             viewModel.openUserAgreement(getString(R.string.userAgreement))
         }
+
     }
+
     private fun handleSettingsState(state: SettingsState) {
         themeSwitcher.isChecked = state.isDarkThemeEnabled
     }
@@ -62,6 +73,5 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.setDarkTheme(isChecked)
         }
     }
-
 
 }
