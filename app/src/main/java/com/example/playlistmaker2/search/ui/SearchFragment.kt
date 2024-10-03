@@ -5,30 +5,33 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker2.EDITED_TEXT
-import com.example.playlistmaker2.R
-import com.example.playlistmaker2.search.domain.model.Track
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker2.AUDIO_PLAYER_DATA
 import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
+import com.example.playlistmaker2.EDITED_TEXT
+import com.example.playlistmaker2.databinding.FragmentSearchBinding
 import com.example.playlistmaker2.player.ui.AudioPlayerActivity
+import com.example.playlistmaker2.search.domain.model.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     companion object {
         private const val TEXT = ""
     }
+
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<SearchViewModel>()
     private var listSong: List<Track> = emptyList()
     private var textValue: String = TEXT
@@ -42,41 +45,47 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var rvHistory: RecyclerView
     private lateinit var historyAdapter: SearchAdapter
     private lateinit var clearButton: ImageView
-    private var placeholderMessage: ViewGroup? = null
-    private var placeholderMessage2: ViewGroup? = null
+    private var messageNothingWasFound: ViewGroup? = null
+    private var messageConnectError: ViewGroup? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.stateLiveData.observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.stateLiveData.observe(viewLifecycleOwner) {
             render(it)
         }
 
-        val back = findViewById<Button>(R.id.back_search)
-        placeholderMessage = findViewById(R.id.placeholder_message)
-        placeholderMessage2 = findViewById(R.id.placeholder_message2)
-        historyLayout = findViewById(R.id.history_layout)
-        inputEditText = findViewById(R.id.input_search)
-        progressBar = findViewById(R.id.progressBar)
-        clearButton = findViewById(R.id.clear_text)
-        rvSearch = findViewById(R.id.searchRecyclerView)
-        rvHistory = findViewById(R.id.historyRecyclerView)
+        messageNothingWasFound = binding.nothingWasFound
+        messageConnectError = binding.communicationProblems
+        historyLayout = binding.historyLayout
+        inputEditText = binding.inputSearch
+        progressBar = binding.progressBar
+        clearButton = binding.clearText
+        rvSearch = binding.searchRecyclerView
+        rvHistory = binding.historyRecyclerView
 
         init() //Инициализация добавления трека в историю и переход в плеер
 
         rvSearch.adapter = songAdapter
         rvHistory.adapter = historyAdapter
-        val update = findViewById<Button>(R.id.update)
-        val clearHistoryButton = findViewById<Button>(R.id.clear_history)
+        val update = binding.update
+        val clearHistoryButton = binding.clearHistory
 
 
-        viewModel.historyList.observe(this){
+        viewModel.historyList.observe(viewLifecycleOwner){
                 historyList ->
-                historyAdapter.data = historyList
-                rvHistory.adapter = historyAdapter
-                historyAdapter.notifyDataSetChanged()
-                if (historyList.isNotEmpty()) historyLayout.isVisible = true
+            historyAdapter.data = historyList
+            rvHistory.adapter = historyAdapter
+            historyAdapter.notifyDataSetChanged()
+            if (historyList.isNotEmpty()) historyLayout.isVisible = true
         }
 
         if (savedInstanceState != null) {
@@ -88,11 +97,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.addTextChangedListener(onTextChanged = { s: CharSequence?, _, _, _ ->
-            if (placeholderMessage2?.isVisible == true) {
-                placeholderMessage2?.isVisible = false
+            if (messageConnectError?.isVisible == true) {
+                messageConnectError?.isVisible = false
             }
-            if (placeholderMessage?.isVisible == true) {
-                placeholderMessage?.isVisible = false
+            if (messageNothingWasFound?.isVisible == true) {
+                messageNothingWasFound?.isVisible = false
             }
             viewModel.searchDebounce(changedText = s?.toString() ?: "")
 
@@ -100,10 +109,10 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.isVisible = viewModel.historyRead().isNotEmpty()
 
             if (inputEditText.hasFocus() && s?.isEmpty() == true){
-            historyLayout.isVisible = true
-            songAdapter.data = emptyList()
-            songAdapter.notifyDataSetChanged()
-            historyAdapter.data = viewModel.historyRead()
+                historyLayout.isVisible = true
+                songAdapter.data = emptyList()
+                songAdapter.notifyDataSetChanged()
+                historyAdapter.data = viewModel.historyRead()
             }
         },
             afterTextChanged = { a: Editable? ->
@@ -111,26 +120,21 @@ class SearchActivity : AppCompatActivity() {
 
             })
 
-        back.setOnClickListener {
-            finish()
-        }
-
         clearButton.setOnClickListener {
             inputEditText.setText(TEXT)
-            val view: View? = currentFocus
             if (view != null) {
                 val inputMethodManager =
-                    this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
                 songAdapter.data = emptyList()
                 songAdapter.notifyDataSetChanged()
                 historyAdapter.data = viewModel.historyRead()
                 historyAdapter.notifyDataSetChanged()
-                if (placeholderMessage2?.isVisible == true) {
-                    placeholderMessage2?.isVisible = false
+                if (messageConnectError?.isVisible == true) {
+                    messageConnectError?.isVisible = false
                 }
-                if (placeholderMessage?.isVisible == true) {
-                    placeholderMessage?.isVisible = false
+                if (messageNothingWasFound?.isVisible == true) {
+                    messageNothingWasFound?.isVisible = false
                 }
             }
         }
@@ -138,8 +142,8 @@ class SearchActivity : AppCompatActivity() {
         update.setOnClickListener {
             viewModel.searchMusicFun(inputEditText.text.toString())
             songAdapter.notifyDataSetChanged()
-            if (placeholderMessage2?.isVisible == true) {
-                placeholderMessage2?.isVisible = false
+            if (messageConnectError?.isVisible == true) {
+                messageConnectError?.isVisible = false
             }
         }
 
@@ -153,8 +157,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        placeholderMessage2?.visibility = View.GONE
-        placeholderMessage?.visibility = View.GONE
+        messageConnectError?.visibility = View.GONE
+        messageNothingWasFound?.visibility = View.GONE
         historyLayout.visibility = View.GONE
         rvSearch.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
@@ -162,19 +166,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showEmpty() {
         progressBar.visibility = View.GONE
-        placeholderMessage2?.visibility = View.GONE
-        placeholderMessage?.visibility = View.VISIBLE
+        messageConnectError?.visibility = View.GONE
+        messageNothingWasFound?.visibility = View.VISIBLE
     }
 
     private fun showError() {
         progressBar.visibility = View.GONE
-        placeholderMessage2?.visibility = View.VISIBLE
+        messageConnectError?.visibility = View.VISIBLE
     }
 
     private fun showContent(song: List<Track>) {
         progressBar.visibility = View.GONE
-        placeholderMessage?.visibility = View.GONE
-        placeholderMessage2?.visibility = View.GONE
+        messageNothingWasFound?.visibility = View.GONE
+        messageConnectError?.visibility = View.GONE
         rvSearch.visibility = View.VISIBLE
 
         songAdapter.data = emptyList()
@@ -194,7 +198,7 @@ class SearchActivity : AppCompatActivity() {
     private fun init() {
         historyAdapter = SearchAdapter(viewModel.historyRead()){
             if (clickDebounce()) {
-                val playerIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
                 playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
                 startActivity(playerIntent)
             }
@@ -203,7 +207,7 @@ class SearchActivity : AppCompatActivity() {
         songAdapter = SearchAdapter(listSong){
             if (clickDebounce()) {
                 viewModel.historyAdd(viewModel.historyRead(), it)
-                val playerIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
                 playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
                 startActivity(playerIntent)
             }
@@ -220,4 +224,5 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-}
+
+    }
