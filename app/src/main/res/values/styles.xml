@@ -52,5 +52,9 @@
     <style name="colorBarWhite" parent="@style/Base.Theme.PlaylistMaker">
              <item name="android:statusBarColor">?attr/colorSecondary</item>
     </style>
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Убираем выделение фона при выборе -->
+        <item name="itemShapeAppearanceOverlay">@null</item>
+    </style>
 
 </resources>
