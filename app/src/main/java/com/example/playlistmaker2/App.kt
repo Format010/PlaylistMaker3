@@ -13,6 +13,7 @@ import settingsModule
 
 const val SECRET_KEY = "wd"
 const val USER_KEY_HISTORY = "history_save"
+const val TIMER_MUSIC_DELAY = 300L
 const val CLICK_DEBOUNCE_DELAY = 1000L
 const val AUDIO_PLAYER_DATA = "track"
 const val SEARCH_DEBOUNCE_DELAY = 2000L

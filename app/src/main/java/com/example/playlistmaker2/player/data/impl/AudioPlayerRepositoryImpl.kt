@@ -30,7 +30,6 @@ class AudioPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer?): AudioPla
                     }
             }
             mediaPlayer?.setOnCompletionListener {
-
                 endSong = true
             }
         }

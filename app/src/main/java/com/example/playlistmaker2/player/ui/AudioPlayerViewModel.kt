@@ -1,14 +1,17 @@
 package com.example.playlistmaker2.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
+import com.example.playlistmaker2.TIMER_MUSIC_DELAY
 import com.example.playlistmaker2.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker2.player.domain.models.AudioPlayerStateStatus
 import com.example.playlistmaker2.player.domain.models.AudioPlayerUiState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val playerInteractor: AudioPlayerInteractor,
@@ -17,24 +20,8 @@ class AudioPlayerViewModel(
 
     private var _playerUiState = MutableLiveData(AudioPlayerUiState())
     val getPlayerState: LiveData<AudioPlayerUiState> get() = _playerUiState
-
     private var isClickAllowed = true
-
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val updatePositionRunnable = object : Runnable {
-        override fun run() {
-            if (playerInteractor.onCompletionListener()) {
-                updateUiState(onCompletionListener = playerInteractor.onCompletionListener())
-            }
-
-            if (playerInteractor.isPlaying() == true) {
-                updateUiState(currentPosition = playerInteractor.position())
-                handler.postDelayed(this, 1000)
-            }
-        }
-    }
-
+    private var timerJob: Job? = null
     private var currentState = _playerUiState.value ?: AudioPlayerUiState()
 
     private fun updateUiState(
@@ -61,20 +48,20 @@ class AudioPlayerViewModel(
     }
 
     fun play() {
-        seekTo()
         updateUiState(
             isPlaying = true,
             audioPlayerStateStatus = AudioPlayerStateStatus.PLAYING,
         )
+        seekTo()
         playerInteractor.play()
     }
 
     fun pause() {
-        playerInteractor.pause()
         updateUiState(
             isPlaying = false,
             audioPlayerStateStatus = AudioPlayerStateStatus.PAUSED,
         )
+        playerInteractor.pause()
     }
 
     fun endSong() {
@@ -87,14 +74,13 @@ class AudioPlayerViewModel(
     }
 
     private fun release() {
-        playerInteractor.release()
         updateUiState(
             isPlaying = false,
             audioPlayerStateStatus = AudioPlayerStateStatus.DEFAULT,
             currentPosition = 0,
             onCompletionListener = false
         )
-        handler.removeCallbacks(updatePositionRunnable)
+        playerInteractor.release()
     }
 
     private fun seekTo() {
@@ -108,14 +94,25 @@ class AudioPlayerViewModel(
     }
 
     private fun startUpdatingPosition() {
-        handler.post(updatePositionRunnable)
+        timerJob = viewModelScope.launch {
+            while(currentState.isPlaying) {
+                updateUiState(currentPosition = playerInteractor.position())
+                if (playerInteractor.onCompletionListener()) {
+                    updateUiState(onCompletionListener = playerInteractor.onCompletionListener())
+                }
+                delay(TIMER_MUSIC_DELAY)
+            }
+        }
     }
 
     fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
