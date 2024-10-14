@@ -108,7 +108,7 @@ class SearchFragment : Fragment() {
             historyLayout.isVisible = viewModel.historyRead().isNotEmpty()
 
             if (inputEditText.hasFocus() && s?.isEmpty() == true){
-                historyLayout.isVisible = true
+                historyLayout.isVisible = viewModel.historyRead().isNotEmpty()
                 songAdapter.data = emptyList()
                 songAdapter.notifyDataSetChanged()
                 historyAdapter.data = viewModel.historyRead()

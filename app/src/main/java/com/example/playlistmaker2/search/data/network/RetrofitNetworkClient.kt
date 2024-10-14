@@ -23,8 +23,11 @@ class RetrofitNetworkClient(
             return withContext(Dispatchers.IO) {
                 try {
                     val response = imdbService.searchSong(dto.expression)
-                    response.apply { code = 200 }
-
+                    if (response.results.isEmpty()){
+                        response.apply { code = 0 }
+                    }else {
+                        response.apply { code = 200 }
+                    }
                 } catch (e: IOException) {
                     Response(404)
                 }

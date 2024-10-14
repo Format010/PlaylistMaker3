@@ -19,6 +19,10 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
                 emit(Resource.Error("Not connect internet"))
             }
 
+            0 -> {
+                emit(Resource.Error("Is empty"))
+            }
+
             200 -> {
                 emit(Resource.Success((response as SearchResponse).results.map {
                     Track(
@@ -33,9 +37,7 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
                         it.country,
                         it.previewUrl
                     )
-
                 }))
-
             }
 
             404 -> {
