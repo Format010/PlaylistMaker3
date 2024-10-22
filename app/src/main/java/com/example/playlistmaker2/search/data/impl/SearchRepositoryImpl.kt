@@ -6,20 +6,25 @@ import com.example.playlistmaker2.search.data.dto.SearchResponse
 import com.example.playlistmaker2.search.data.SearchRepository
 import com.example.playlistmaker2.search.domain.model.Track
 import com.example.playlistmaker2.util.Resource
-
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRepository {
 
-    override fun searchMusic(expression: String): Resource<List<Track>> {
+    override fun searchMusic(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(SearchRequest(expression))
 
-        return when (response.code) {
+        when (response.code) {
             -1 -> {
-                Resource.Error("Not connect internet")
+                emit(Resource.Error("Not connect internet"))
+            }
+
+            0 -> {
+                emit(Resource.Error("Is empty"))
             }
 
             200 -> {
-                Resource.Success((response as SearchResponse).results.map {
+                emit(Resource.Success((response as SearchResponse).results.map {
                     Track(
                         it.trackId,
                         it.trackName,
@@ -32,17 +37,15 @@ class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRep
                         it.country,
                         it.previewUrl
                     )
-
-                })
-
+                }))
             }
 
             404 -> {
-                Resource.Error("404")
+                emit(Resource.Error("404"))
             }
 
             else -> {
-                Resource.Error("Ошибка сервера")
+                emit(Resource.Error("Ошибка сервера"))
             }
 
         }

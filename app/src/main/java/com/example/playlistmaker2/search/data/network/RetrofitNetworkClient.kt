@@ -5,6 +5,8 @@ import android.net.NetworkCapabilities
 import com.example.playlistmaker2.search.data.NetworkClient
 import com.example.playlistmaker2.search.data.dto.SearchRequest
 import com.example.playlistmaker2.search.data.dto.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class RetrofitNetworkClient(
@@ -12,27 +14,27 @@ class RetrofitNetworkClient(
     private val imdbService: AppleItunesApi
 ) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) {
             return Response(-1)
         }
+
         if (dto is SearchRequest) {
-            try {
-                val resp = imdbService.searchSong(dto.expression).execute()
-                if (resp.isSuccessful) {
-                    val body = resp.body() ?: Response(resp.code())
-                    body.code = resp.code()
-                    return body
-                } else {
-                    return Response(resp.code())
+            return withContext(Dispatchers.IO) {
+                try {
+                    val response = imdbService.searchSong(dto.expression)
+                    if (response.results.isEmpty()){
+                        response.apply { code = 0 }
+                    }else {
+                        response.apply { code = 200 }
+                    }
+                } catch (e: IOException) {
+                    Response(404)
                 }
-            } catch (e: IOException) {
-                return Response(404)
             }
         } else {
             return Response(400)
         }
-
     }
 
     private fun isConnected(): Boolean {
