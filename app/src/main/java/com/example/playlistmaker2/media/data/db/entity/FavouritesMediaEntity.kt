@@ -18,6 +18,6 @@ data class FavouritesMediaEntity(
     val primaryGenreName: String,
     val country: String,
     val urlTrack: String,
-    val dataSort: String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+    val dataSort: String = DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
 
 )
