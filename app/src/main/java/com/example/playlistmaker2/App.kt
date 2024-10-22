@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import audioPlayerModule
+import favouritesMediaDataModule
 import mediaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -28,7 +29,7 @@ class App: Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(searchModule, settingsModule, audioPlayerModule, mediaModule)
+            modules(searchModule, settingsModule, audioPlayerModule, mediaModule, favouritesMediaDataModule)
         }
 
         val sharedPrefs = getSharedPreferences(SECRET_KEY, MODE_PRIVATE)

@@ -20,9 +20,10 @@ import java.util.Locale
 class AudioPlayerActivity() : AppCompatActivity() {
 
     private var url: String? = null
+    private var idTrack: String? = null
     private lateinit var binding: ActivityAudioPlayerBinding
     private val viewModel by viewModel<AudioPlayerViewModel>() {
-        parametersOf(url)
+        parametersOf(url, idTrack)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
             track?.releaseDate?.substring(0..3) //Api iTunes возвращает строку (YYYY-MM-DDTHH:MM:SSZ) забираем только Год
 
         url = track?.previewUrl
+        idTrack = track?.trackId
         binding.artistName.text = track?.artistName
         binding.trackName.text = track?.trackName
 
@@ -79,6 +81,9 @@ class AudioPlayerActivity() : AppCompatActivity() {
         binding.backAp.setOnClickListener {
             finish()
         }
+        binding.favorite.setOnClickListener{
+            if (viewModel.clickDebounce())viewModel.onFavoriteClicked(track!!)
+        }
     }
 
     private fun updateUi(uiState: AudioPlayerUiState) {
@@ -92,6 +97,9 @@ class AudioPlayerActivity() : AppCompatActivity() {
         if (uiState.onCompletionListener) {
             viewModel.endSong()
         }
+        if (uiState.favouritesTrack)binding.favorite.setImageResource(R.drawable.like_2)
+        else binding.favorite.setImageResource(R.drawable.like)
+
     }
 
     override fun onPause() {

@@ -3,6 +3,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.playlistmaker2.media.ui.favourites.MediaFavoriteTrackFragment
+import com.example.playlistmaker2.media.ui.playlist.MediaPlaylistFragment
 
 
 class MediaNumbersViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
