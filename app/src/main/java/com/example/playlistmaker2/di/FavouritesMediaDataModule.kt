@@ -1,11 +1,11 @@
 import androidx.room.Room
-import com.example.playlistmaker2.media.data.FavouritesMediaRepository
+import com.example.playlistmaker2.media.domain.FavouritesMediaRepository
 import com.example.playlistmaker2.media.data.converter.TrackConverter
 import com.example.playlistmaker2.media.data.db.AppDatabase
 import com.example.playlistmaker2.media.data.impl.FavouritesMediaRepositoryImpl
-import com.example.playlistmaker2.media.domain.db.FavouritesMediaInteractor
-import com.example.playlistmaker2.media.domain.db.impl.FavouritesMediaInteractorImpl
-import com.example.playlistmaker2.media.presentation.MediaFavoriteTrackViewModel
+import com.example.playlistmaker2.media.domain.FavouritesMediaInteractor
+import com.example.playlistmaker2.media.domain.impl.FavouritesMediaInteractorImpl
+import com.example.playlistmaker2.media.ui.favourites.MediaFavoriteTrackViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

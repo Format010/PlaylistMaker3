@@ -3,6 +3,8 @@ package com.example.playlistmaker2.media.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 @Entity(tableName = "favourites_media_table")
 data class FavouritesMediaEntity(
@@ -16,5 +18,6 @@ data class FavouritesMediaEntity(
     val primaryGenreName: String,
     val country: String,
     val urlTrack: String,
+    val dataSort: String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
 
 )

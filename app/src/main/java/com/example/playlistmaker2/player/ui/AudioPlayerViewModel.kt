@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
 import com.example.playlistmaker2.TIMER_MUSIC_DELAY
-import com.example.playlistmaker2.media.domain.db.FavouritesMediaInteractor
+import com.example.playlistmaker2.media.domain.FavouritesMediaInteractor
 import com.example.playlistmaker2.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker2.player.domain.models.AudioPlayerStateStatus
 import com.example.playlistmaker2.player.domain.models.AudioPlayerUiState

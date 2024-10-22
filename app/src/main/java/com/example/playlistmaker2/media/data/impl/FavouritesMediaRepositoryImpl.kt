@@ -1,6 +1,6 @@
 package com.example.playlistmaker2.media.data.impl
 
-import com.example.playlistmaker2.media.data.FavouritesMediaRepository
+import com.example.playlistmaker2.media.domain.FavouritesMediaRepository
 import com.example.playlistmaker2.media.data.converter.TrackConverter
 import com.example.playlistmaker2.media.data.db.AppDatabase
 import com.example.playlistmaker2.media.data.db.entity.FavouritesMediaEntity

@@ -1,4 +1,4 @@
-package com.example.playlistmaker2.media.ui
+package com.example.playlistmaker2.media.ui.favourites
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker2.AUDIO_PLAYER_DATA
 import com.example.playlistmaker2.CLICK_DEBOUNCE_DELAY
 import com.example.playlistmaker2.databinding.FragmentFavoriteTrackBinding
-import com.example.playlistmaker2.media.presentation.MediaFavoriteTrackViewModel
 import com.example.playlistmaker2.player.ui.AudioPlayerActivity
 import com.example.playlistmaker2.search.domain.model.Track
 import com.example.playlistmaker2.search.ui.SearchAdapter

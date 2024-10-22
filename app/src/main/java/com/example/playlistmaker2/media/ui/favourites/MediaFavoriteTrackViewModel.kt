@@ -1,11 +1,10 @@
-package com.example.playlistmaker2.media.presentation
+package com.example.playlistmaker2.media.ui.favourites
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker2.media.domain.db.FavouritesMediaInteractor
-import com.example.playlistmaker2.media.ui.FauvoriteTrackState
+import com.example.playlistmaker2.media.domain.FavouritesMediaInteractor
 import com.example.playlistmaker2.search.domain.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

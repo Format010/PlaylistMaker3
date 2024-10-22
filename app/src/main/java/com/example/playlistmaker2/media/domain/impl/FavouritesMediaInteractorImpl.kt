@@ -1,7 +1,7 @@
-package com.example.playlistmaker2.media.domain.db.impl
+package com.example.playlistmaker2.media.domain.impl
 
-import com.example.playlistmaker2.media.data.FavouritesMediaRepository
-import com.example.playlistmaker2.media.domain.db.FavouritesMediaInteractor
+import com.example.playlistmaker2.media.domain.FavouritesMediaRepository
+import com.example.playlistmaker2.media.domain.FavouritesMediaInteractor
 import com.example.playlistmaker2.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 
