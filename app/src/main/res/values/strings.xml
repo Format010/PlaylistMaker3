@@ -34,5 +34,26 @@
     <string name="tab_layout">Вкладки</string>
     <string name="favorite_track">Избранные треки</string>
     <string name="playlist">Плейлисты</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="create_playlist">Создать</string>
+    <string name="title_playlist">Название*</string>
+    <string name="description_playlist">Описание</string>
+    <string name="message_end_playlist">Завершить создание плейлиста?</string>
+    <string name="message_lost_data_playlist">Все несохраненные данные будут потеряны!</string>
+    <string name="cancel">Отмена</string>
+    <string name="complete">Завершить</string>
+    <string name="empty_playlist">Плейлист не создан!</string>
+    <string name="permission">Предоставьте разрешение для доступа к медиа рессурсам!</string>
+    <string name="tracks_zero">0 треков</string>
+    <string name="add_playlist">Добавить в плейлист</string>
+    <string name="message_toast_insert_playlist">Трек добавлен в плейлист %s!</string>
+    <string name="message_toast_insert_playlist_false">Трек уже добавлен в плейлист %s!</string>
+
+    <plurals name="count_of_tracks">
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d треков</item>
+    </plurals>
 
 </resources>

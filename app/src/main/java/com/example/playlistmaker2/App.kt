@@ -5,8 +5,9 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import audioPlayerModule
+import com.example.playlistmaker2.di.playlistModule
+import com.markodevcic.peko.PermissionRequester
 import favouritesMediaDataModule
-import mediaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import searchModule
@@ -29,8 +30,10 @@ class App: Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(searchModule, settingsModule, audioPlayerModule, mediaModule, favouritesMediaDataModule)
+            modules(searchModule, settingsModule, audioPlayerModule, favouritesMediaDataModule, playlistModule)
         }
+
+        PermissionRequester.initialize(applicationContext) //Инициализация Peko
 
         val sharedPrefs = getSharedPreferences(SECRET_KEY, MODE_PRIVATE)
         darkTheme = if (checkDarkThemeOnDevice()) sharedPrefs.getBoolean(SECRET_KEY, true)

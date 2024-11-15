@@ -14,6 +14,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/set_marginTop140"
+        android:indeterminateTint="@color/yp_blue"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <ImageView
         android:id="@+id/error_playlist_image"
         android:layout_width="wrap_content"
@@ -22,6 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_playlist"
+        android:visibility="gone"
         app:srcCompat="@drawable/not_search" />
 
     <TextView
@@ -36,5 +49,15 @@
         android:text="@string/playlist_null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/error_playlist_image" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/set_searchItem_8dp"
+        android:layout_marginStart="@dimen/set_searchItem_8dp"
+        app:layout_constraintTop_toBottomOf="@+id/new_playlist"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

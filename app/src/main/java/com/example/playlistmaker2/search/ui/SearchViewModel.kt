@@ -89,10 +89,6 @@ class SearchViewModel(application: Application, private val searchInteractor: Se
         return historyInteractor.read()
     }
 
-    fun historyWrite(searchHistory: List<Track>){
-        historyInteractor.write(searchHistory)
-    }
-
     fun historyClear(){
         historyInteractor.clearSearch()
     }

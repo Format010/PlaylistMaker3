@@ -12,11 +12,13 @@
     <dimen name="set_size30">30dp</dimen>
     <dimen name="set_size32">32dp</dimen>
     <dimen name="set_size46">46dp</dimen>
+    <dimen name="set_size48">48dp</dimen>
     <dimen name="set_size62">62dp</dimen>
     <dimen name="set_size106">106dp</dimen>
     <dimen name="set_textSize16">16sp</dimen>
     <dimen name="set_textSize19">19sp</dimen>
     <dimen name="set_textSize11">11sp</dimen>
+    <dimen name="set_textSize12">12sp</dimen>
     <dimen name="set_textSize13">13sp</dimen>
     <dimen name="set_textSize14">14sp</dimen>
     <dimen name="set_textSize22">22sp</dimen>
@@ -24,6 +26,9 @@
     <dimen name="set_padding18">18dp</dimen>
     <dimen name="marginTop12">12dp</dimen>
     <dimen name="set_size24">24dp</dimen>
+    <dimen name="rectangle_top_8">8dp</dimen>
+    <dimen name="rectangle_width_50">50dp</dimen>
+    <dimen name="rectangle_height_4">4dp</dimen>
     <dimen name="set_marginSearchLists13">13dp</dimen>
     <dimen name="set_marginSearchLists14">14dp</dimen>
     <dimen name="set_marginTop140">140dp</dimen>
@@ -37,5 +42,8 @@
     <dimen name="set_padding_4">4dp</dimen>
     <dimen name="set_padding_12">12dp</dimen>
     <dimen name="set_padding_102">102dp</dimen>
+    <dimen name="set_size_160">160dp</dimen>
+    <dimen name="set_size_196">196dp</dimen>
+    <dimen name="radius_8">8dp</dimen>
 
 </resources>

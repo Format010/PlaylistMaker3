@@ -46,6 +46,7 @@ android {
 val moxyVersion = "2.2.2"
 val roomVersion = "2.6.1"
 dependencies {
+    implementation ("com.markodevcic:peko:3.0.5")
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
