@@ -1,19 +1,18 @@
-package com.example.playlistmaker2.media.ui
+package com.example.playlistmaker2.media.ui.playlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.playlistmaker2.databinding.FragmentFavoriteTrackBinding
-import com.example.playlistmaker2.media.presentation.MediaFavoriteTrackViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.fragment.app.viewModels
+import com.example.playlistmaker2.databinding.FragmentPlaylistBinding
 
-class MediaFavoriteTrackFragment: Fragment() {
+class MediaPlaylistFragment: Fragment() {
 
-    private val viewModel: MediaFavoriteTrackViewModel by viewModel()
+    private val viewModel: MediaPlaylistViewModel by viewModels()
 
-    private var _binding: FragmentFavoriteTrackBinding? = null
+    private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = requireNotNull(_binding) { "Binding wasn't initiliazed!" }
 
     override fun onCreateView(
@@ -21,7 +20,7 @@ class MediaFavoriteTrackFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoriteTrackBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,8 +35,9 @@ class MediaFavoriteTrackFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(): MediaFavoriteTrackFragment {
-            return MediaFavoriteTrackFragment()
+        fun newInstance(): MediaPlaylistFragment {
+            return MediaPlaylistFragment()
         }
+
     }
 }

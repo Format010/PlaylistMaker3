@@ -7,6 +7,7 @@ import com.example.playlistmaker2.search.data.dto.SearchRequest
 import com.example.playlistmaker2.search.data.dto.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import java.io.IOException
 
 class RetrofitNetworkClient(
@@ -23,12 +24,21 @@ class RetrofitNetworkClient(
             return withContext(Dispatchers.IO) {
                 try {
                     val response = imdbService.searchSong(dto.expression)
+                    if (response.code == 404){
+                        response.apply { code = 404 }
+                    }
                     if (response.results.isEmpty()){
                         response.apply { code = 0 }
                     }else {
                         response.apply { code = 200 }
                     }
-                } catch (e: IOException) {
+
+                }catch (e: HttpException){
+                    when(e.code()){
+                        404 -> Response(0)
+                        else -> Response(404)
+                    }
+                }catch (e: IOException) {
                     Response(404)
                 }
             }

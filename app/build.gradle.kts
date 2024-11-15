@@ -44,7 +44,11 @@ android {
 
 }
 val moxyVersion = "2.2.2"
+val roomVersion = "2.6.1"
 dependencies {
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.8.2")
     implementation ("androidx.navigation:navigation-ui-ktx:2.8.2")
