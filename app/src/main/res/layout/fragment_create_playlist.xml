@@ -37,7 +37,6 @@
         android:layout_marginStart="@dimen/set_size24"
         android:layout_marginTop="@dimen/set_size26"
         android:layout_marginEnd="@dimen/set_size24"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/back_playlist"
@@ -52,7 +51,6 @@
         android:layout_marginStart="@dimen/set_padding16"
         android:layout_marginTop="@dimen/set_size32"
         android:layout_marginEnd="@dimen/set_padding16"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artwork">

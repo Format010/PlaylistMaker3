@@ -1,11 +1,13 @@
 package com.example.playlistmaker2.media.ui.playlist
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
@@ -16,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -54,6 +57,7 @@ class CreatePlaylistFragment : Fragment() {
     }
 
     private var interactorAP: audioPlayerToFragment? = null
+    lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -88,12 +92,13 @@ class CreatePlaylistFragment : Fragment() {
 
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         showDialog()
 
-        val pickMedia =
+        pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     newUri = saveImageToPrivateStorage(uri)
@@ -115,42 +120,25 @@ class CreatePlaylistFragment : Fragment() {
             }
 
         binding.artwork.setOnClickListener {
-            lifecycleScope.launch {
-                requester.request(Manifest.permission.READ_MEDIA_IMAGES).collect { resultReading ->
-                    when (resultReading) {
-                        is PermissionResult.Granted -> {
-                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        }
-
-                        is PermissionResult.Denied.NeedsRationale -> {
-                            Toast.makeText(
-                                requireContext(),
-                                R.string.permission,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        is PermissionResult.Denied.DeniedPermanently -> {
-                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            intent.data = Uri.fromParts("package", context?.packageName, null)
-                            context?.startActivity(intent)
-                        }
-
-                        PermissionResult.Cancelled -> {
-                            return@collect
-                        }
-                    }
-                }
+            when(Build.VERSION.SDK_INT){
+                in 1..32 -> permissionMedia(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    else -> permissionMedia(Manifest.permission.READ_MEDIA_IMAGES)
             }
+
         }
 
         binding.titleText.addTextChangedListener(onTextChanged = { s: CharSequence?, _, _, _ ->
-            binding.createBtn.isEnabled = s?.isEmpty() != true
+                binding.createBtn.isEnabled = s?.isEmpty() != true
         })
 
         binding.backPlaylist.setOnClickListener {
-            dialog?.show()
+            if(newUri != null || binding.titleText.text?.isEmpty() != true || binding.descriptionText.text?.isEmpty() != true) {
+                dialog?.show()
+            }else {
+                if (PREVIOUS_SCREEN == "AudioPlayer") {
+                    interactorAP?.showElementUi()
+                } else parentFragmentManager.popBackStack()
+            }
         }
 
         binding.createBtn.setOnClickListener {
@@ -158,11 +146,18 @@ class CreatePlaylistFragment : Fragment() {
             if (PREVIOUS_SCREEN == "AudioPlayer") {
                 interactorAP?.showElementUi()
             } else parentFragmentManager.popBackStack()
+
         }
 
         activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                dialog?.show()
+                if(newUri != null || binding.titleText.text?.isEmpty() != true || binding.descriptionText.text?.isEmpty() != true) {
+                    dialog?.show()
+                }else {
+                    if (PREVIOUS_SCREEN == "AudioPlayer") {
+                        interactorAP?.showElementUi()
+                    } else parentFragmentManager.popBackStack()
+                }
             }
         })
     }
@@ -201,20 +196,45 @@ class CreatePlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
+            dialog = MaterialAlertDialogBuilder(requireContext(), R.style.dialogStyle)
+                .setTitle(R.string.message_end_playlist) // Заголовок диалога
+                .setMessage(R.string.message_lost_data_playlist) // Описание диалога
+                .setNeutralButton(R.string.cancel) { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(R.string.complete) { dialog, which ->
+                    if (PREVIOUS_SCREEN == "AudioPlayer") {
+                        interactorAP?.showElementUi()
+                    } else parentFragmentManager.popBackStack()
+                }
+    }
 
-        dialog = MaterialAlertDialogBuilder(requireContext(), R.style.dialogStyle)
-            .setTitle(R.string.message_end_playlist) // Заголовок диалога
-            .setMessage(R.string.message_lost_data_playlist) // Описание диалога
-            .setNeutralButton(R.string.cancel) { dialog, which ->
-                dialog.dismiss()
+    private fun permissionMedia(manifest : String) {
+        lifecycleScope.launch {
+            requester.request(manifest).collect { resultReading ->
+                when (resultReading) {
+                    is PermissionResult.Granted -> {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                    is PermissionResult.Denied.NeedsRationale -> {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.permission,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is PermissionResult.Denied.DeniedPermanently -> {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.data = Uri.fromParts("package", context?.packageName, null)
+                        context?.startActivity(intent)
+                    }
+                    PermissionResult.Cancelled -> {
+                        return@collect
+                    }
+                }
             }
-            .setPositiveButton(R.string.complete) { dialog, which ->
-
-                if (PREVIOUS_SCREEN == "AudioPlayer") {
-                    interactorAP?.showElementUi()
-                } else parentFragmentManager.popBackStack()
-
-            }
+        }
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {
