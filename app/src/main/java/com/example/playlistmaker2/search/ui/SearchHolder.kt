@@ -12,7 +12,8 @@ import com.example.playlistmaker2.search.ui.SearchAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class SearchHolder(itemView: View, private val listenerItem: SearchAdapter.OnClickListenerItem) : RecyclerView.ViewHolder(itemView) {
+class SearchHolder(itemView: View, private val listenerItem: SearchAdapter.OnClickListenerItem
+) : RecyclerView.ViewHolder(itemView) {
 
     private val artwork: ImageView = itemView.findViewById(R.id.artwork)
     private val trackName: TextView = itemView.findViewById(R.id.track_name)

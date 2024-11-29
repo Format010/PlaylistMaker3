@@ -1,7 +1,5 @@
 package com.example.playlistmaker2.media.data.impl
 
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.playlistmaker2.media.domain.FavouritesMediaRepository
 import com.example.playlistmaker2.media.data.converter.TrackConverter
 import com.example.playlistmaker2.media.data.db.AppDatabase

@@ -14,15 +14,16 @@ import org.koin.dsl.module
 
 val favouritesMediaDataModule = module {
 
-    val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("ALTER TABLE favourites_media_table ADD COLUMN dataSort TEXT NOT NULL DEFAULT 0")
-        }
-    }
+//    val MIGRATION_1_2 = object : Migration(1, 2) {
+//        override fun migrate(database: SupportSQLiteDatabase) {
+//            database.execSQL("ALTER TABLE favourites_media_table ADD COLUMN dataSort TEXT NOT NULL DEFAULT 0")
+//        }
+//    }
+
 
     single<AppDatabase> {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .addMigrations(MIGRATION_1_2)
+            //.addMigrations(MIGRATION_1_2)
             .build()
     }
 

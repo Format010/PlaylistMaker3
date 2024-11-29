@@ -49,12 +49,50 @@
         <item name="cornerRadius">@dimen/set_size20</item>
     </style>
 
+    <style name="ButtonStylePlayList" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/set_textSize16</item>
+        <item name="backgroundTint">@color/color_button_disable</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="cornerRadius">@dimen/radius_8</item>
+    </style>
+    <style name="cornerRadius8">
+        <item name="cornerRadius">@dimen/radius_8</item>
+    </style>
+
     <style name="colorBarWhite" parent="@style/Base.Theme.PlaylistMaker">
              <item name="android:statusBarColor">?attr/colorSecondary</item>
     </style>
     <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <!-- Убираем выделение фона при выборе -->
         <item name="itemShapeAppearanceOverlay">@null</item>
+    </style>
+
+    <style name="dialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- Настройка диалогового окна  MaterialAlertDialogBuilder -->
+        <item name="android:background">@color/yp_white</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyleCenter</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyleCenter</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+    </style>
+
+    <style name="TitleTextStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked">
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="BodyTextStyleCenter" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yp_blue</item>
+    </style>
+    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yp_blue</item>
+    </style>
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/yp_blue</item>
     </style>
 
 </resources>

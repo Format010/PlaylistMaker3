@@ -34,5 +34,28 @@
     <string name="tab_layout">Tab</string>
     <string name="favorite_track">Favorites tracks</string>
     <string name="playlist">Playlists</string>
+    <string name="new_playlist">New playlists</string>
+    <string name="create_playlist">Create</string>
+    <string name="title_playlist">Title*</string>
+    <string name="description_playlist">Description</string>
+    <string name="message_end_playlist">Finish creating a playlist?</string>
+    <string name="message_lost_data_playlist">All unsaved data will be lost!</string>
+    <string name="cancel">Cancel</string>
+    <string name="complete">Complete</string>
+    <string name="empty_playlist">Playlist is not create!</string>
+    <string name="permission">Grant permission to access media resources!</string>
+    <string name="tracks_zero">0 tracks</string>
+    <string name="add_playlist">Add to playlist</string>
+    <string name="message_toast_insert_playlist">Track added to playlist %s!</string>
+    <string name="message_toast_insert_playlist_false">The track has already been added to the playlist %s!</string>
+
+    <plurals name="count_of_tracks">
+        <item quantity="one">%d track</item>
+        <item quantity="few">%d track</item>
+        <item quantity="many">%d tracks</item>
+        <item quantity="other">%d tracks</item>
+    </plurals>
+
+
 
 </resources>
