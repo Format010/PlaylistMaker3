@@ -33,7 +33,14 @@ class PlaylistFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerviewPlaylist.layoutManager = GridLayoutManager(requireContext(), 2)
-        adapter = PlaylistAdapter()
+
+        adapter = PlaylistAdapter(){
+            val bundle = Bundle().apply {
+                putInt("playlistId", it.playlistId)
+            }
+            findNavController().navigate(R.id.action_mediaFragment_to_playlistScreenFragment, bundle)
+        }
+
         binding.recyclerviewPlaylist.adapter = adapter
 
         viewModel.getPlaylists()
@@ -67,6 +74,7 @@ class PlaylistFragment: Fragment() {
         adapter?.playlists?.clear()
         adapter?.playlists?.addAll(playlists)
         adapter?.notifyDataSetChanged()
+
     }
 
     private fun showEmpty(message:String) {

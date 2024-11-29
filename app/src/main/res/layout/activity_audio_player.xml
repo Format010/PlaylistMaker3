@@ -14,7 +14,6 @@
         android:id="@+id/container_view_audiopleer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         app:defaultNavHost="true"
         app:navGraph="@navigation/main_navigation_graph"
         android:visibility="gone"
@@ -75,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/artwork" />
 
     <TextView
-        android:id="@+id/artist_name"
+        android:id="@+id/artistName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/set_size24"
@@ -97,7 +96,7 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/artist_name"
+        app:layout_constraintTop_toBottomOf="@+id/artistName"
         app:srcCompat="@drawable/play" />
 
     <ImageView

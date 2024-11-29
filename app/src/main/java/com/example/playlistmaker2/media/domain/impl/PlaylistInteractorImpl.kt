@@ -1,5 +1,6 @@
 package com.example.playlistmaker2.media.domain.impl
 
+import android.adservices.adid.AdId
 import com.example.playlistmaker2.media.domain.PlaylistInteractor
 import com.example.playlistmaker2.media.domain.PlaylistRepository
 import com.example.playlistmaker2.media.domain.model.Playlist
@@ -32,4 +33,25 @@ class PlaylistInteractorImpl(
     override fun getAllPlaylists(): Flow<List<Playlist>> {
         return repository.getAllPlaylist()
     }
+
+    override fun getTrackListById(trackId: List<String>): Flow<List<Track>>{
+        return repository.getTrackListById(trackId)
+    }
+
+    override suspend fun deleteTrackFromTable(trackId: String) {
+        repository.deleteTrackFromTable(trackId)
+    }
+
+    override fun getAllPlaylistbyTrackId(trackId: String): Flow<List<Playlist>> {
+        return repository.getAllPlaylistbyTrackId(trackId)
+            }
+
+    override suspend fun delTrackIdToPlaylist(trackId: String, playlist: Playlist){
+        repository.delTrackIdToPlaylist(trackId,playlist)
+    }
+
+    override suspend fun getPLaylistById(idPlaylist: Int): Playlist {
+        return repository.getPLaylistById(idPlaylist)
+    }
+
 }
