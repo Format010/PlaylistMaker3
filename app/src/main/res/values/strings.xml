@@ -60,6 +60,8 @@
     <string name="delite_playlist">Удалить плейлист</string>
     <string name="empty_list_playlist">В этом плейлисте пока что нет треков.</string>
     <string name="empty_track_list_playlist">К сожалению в этом плейлисте нет треков!</string>
+    <string name="screen_playlist_del_track_message">Удалить трек</string>
+    <string name="screen_playlist_del_playlist_message">Удалить плейлист</string>
 
 
 

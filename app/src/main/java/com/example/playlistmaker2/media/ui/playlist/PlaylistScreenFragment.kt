@@ -244,7 +244,8 @@ class PlaylistScreenFragment() : Fragment() {
 
     private fun showDialogDelTrackInPlaylist(trackId: String) {
         dialog = MaterialAlertDialogBuilder(requireContext(), R.style.dialogStyle)
-            .setTitle(R.string.message_material_dialog_del_track)
+            .setTitle(R.string.screen_playlist_del_track_message)
+            .setMessage(R.string.message_material_dialog_del_track)
             .setNegativeButton(R.string.negative_button_material_dialog_del_track){ dialog, which ->
                 dialog.dismiss()
             }
@@ -257,7 +258,8 @@ class PlaylistScreenFragment() : Fragment() {
     private fun showDialogDelPlaylist(playlist: Playlist) {
         val message = resources.getString(R.string.message_dialog_del_playlist)
         dialog = MaterialAlertDialogBuilder(requireContext(), R.style.dialogStyle)
-            .setTitle("$message «${playlist.title}»?")
+            .setTitle(R.string.screen_playlist_del_playlist_message)
+            .setMessage("$message «${playlist.title}»?")
             .setNegativeButton(R.string.negative_button_material_dialog_del_track){ dialog, which ->
                 dialog.dismiss()
             }

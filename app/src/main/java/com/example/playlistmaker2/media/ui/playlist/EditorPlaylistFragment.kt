@@ -111,6 +111,13 @@ class EditorPlaylistFragment: CreatePlaylistFragment() {
 
         }
 
+        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                parentFragmentManager.popBackStack()
+            }
+        })
+
+
     }
 
     private fun createNewPlaylist(): Playlist {

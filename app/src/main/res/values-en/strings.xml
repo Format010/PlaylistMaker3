@@ -60,6 +60,8 @@
     <string name="delite_playlist">Delete a playlist</string>
     <string name="empty_list_playlist">There are no tracks in this playlist yet.</string>
     <string name="empty_track_list_playlist">Unfortunately, there are no tracks in this playlist!</string>
+    <string name="screen_playlist_del_track_message">Delete track</string>
+    <string name="screen_playlist_del_playlist_message">Delete playlist</string>
 
     <plurals name="count_of_tracks">
         <item quantity="one">%d track</item>

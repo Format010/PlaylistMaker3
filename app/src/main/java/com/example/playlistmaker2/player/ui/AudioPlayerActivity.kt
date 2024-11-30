@@ -158,7 +158,7 @@ class AudioPlayerActivity() : AppCompatActivity(), audioPlayerToFragment  {
             else -> {}
         }
         when (uiState.insertTrackState){
-            is InsertTrackState.IsertTrack -> toast(uiState.insertTrackState.platListName, uiState.insertTrackState.result)
+            is BottomSheetState.IsertTrack -> toast(uiState.insertTrackState.platListName, uiState.insertTrackState.result)
             else -> return
         }
     }
@@ -170,7 +170,7 @@ class AudioPlayerActivity() : AppCompatActivity(), audioPlayerToFragment  {
 
         if (result){
             Toast.makeText(this, textToastTrue , Toast.LENGTH_LONG).show()
-
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }else Toast.makeText(this, textToastFalse, Toast.LENGTH_LONG).show()
     }
 
@@ -178,7 +178,7 @@ class AudioPlayerActivity() : AppCompatActivity(), audioPlayerToFragment  {
 
         adapter = BottomSheetPlaylistAdapter(data){
             track?.let { it1 -> viewModel.addTrackToPLaylist(it1, it) }
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
         }
 
         adapter?.playlists = emptyList()

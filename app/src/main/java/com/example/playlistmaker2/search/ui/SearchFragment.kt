@@ -209,6 +209,7 @@ class SearchFragment : Fragment() {
 
         songAdapter = SearchAdapter(listSong, { track ->
             if (clickDebounce()) {
+                viewModel.historyAdd(viewModel.historyRead(), track)
                 val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
                 playerIntent.putExtra(AUDIO_PLAYER_DATA, track)
                 startActivity(playerIntent)
