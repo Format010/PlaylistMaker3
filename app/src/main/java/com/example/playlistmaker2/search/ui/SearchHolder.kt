@@ -12,13 +12,16 @@ import com.example.playlistmaker2.search.ui.SearchAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class SearchHolder(itemView: View, private val listenerItem: SearchAdapter.OnClickListenerItem
+class SearchHolder(
+                    itemView: View,
+                    private val listenerItem: SearchAdapter.OnClickListenerItem,
+                    private val longListenerItem: SearchAdapter.OnLongClickListener?
 ) : RecyclerView.ViewHolder(itemView) {
 
     private val artwork: ImageView = itemView.findViewById(R.id.artwork)
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
-    private val artistName: TextView = itemView.findViewById(R.id.artist_name)
-    private val trackTime: TextView = itemView.findViewById(R.id.track_time)
+    private val artistName: TextView = itemView.findViewById(R.id.artistName)
+    private val trackTime: TextView = itemView.findViewById(R.id.num_tracks)
 
     fun bind(track: Track) {
 
@@ -40,6 +43,11 @@ class SearchHolder(itemView: View, private val listenerItem: SearchAdapter.OnCli
         itemView.setOnClickListener {
             listenerItem.onItemClick(track)
         }
+        itemView.setOnLongClickListener {
+            longListenerItem?.onLongItemClick(track)
+            true
+        }
+
     }
 
 

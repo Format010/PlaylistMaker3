@@ -10,6 +10,13 @@ sealed interface BottomSheetState {
             var song: List<Playlist>,
         ) : BottomSheetState
 
+    data class IsertTrack(
+        var platListName: String,
+        var result: Boolean
+    ) : BottomSheetState
+
+        object EmptyTrack: BottomSheetState
+
         object Empty: BottomSheetState
 
 

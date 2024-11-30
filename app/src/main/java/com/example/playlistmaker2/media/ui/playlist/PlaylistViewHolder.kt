@@ -9,9 +9,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker2.R
 import com.example.playlistmaker2.databinding.PlaylistItemBinding
 import com.example.playlistmaker2.media.domain.model.Playlist
+import com.example.playlistmaker2.search.ui.SearchAdapter
 
 class PlaylistViewHolder(
-    private val binding: PlaylistItemBinding
+    private val binding: PlaylistItemBinding,
+    private val listenerItem: PlaylistAdapter.OnClickListenerItem
 ) : RecyclerView.ViewHolder(binding.root) {
     private val trackEnding = itemView.context.resources
 
@@ -27,6 +29,10 @@ class PlaylistViewHolder(
 
         binding.title.text = item.title
         binding.description.text = changingTracksCountEnding(item.trackCount)
+
+        itemView.setOnClickListener {
+            listenerItem.onItemClick(item)
+        }
 
     }
 

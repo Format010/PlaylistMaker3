@@ -46,7 +46,7 @@ class AudioPlayerViewModel(
         onCompletionListener: Boolean? = currentState.onCompletionListener,
         favouritesTrack: Boolean? = currentState.favouritesTrack,
         playlistState: BottomSheetState = currentState.playlistState,
-        insertTrackState: InsertTrackState = InsertTrackState.Empty
+        insertTrackState: BottomSheetState = BottomSheetState.EmptyTrack
     ) {
         val updatedState = currentState.copy(
             currentPosition = currentPosition ?: currentState.currentPosition,
@@ -169,11 +169,12 @@ class AudioPlayerViewModel(
     fun addTrackToPLaylist(track: Track, playlist: Playlist){
         viewModelScope.launch {
             if (playlistInteractor.checkTrackInPlaylist(track.trackId ?: "", playlist)){
-                updateUiState(insertTrackState = InsertTrackState.IsertTrack(playlist.title, false))
+                updateUiState(insertTrackState = BottomSheetState.IsertTrack(playlist.title, false))
 
             }else {
+                updateUiState(insertTrackState = BottomSheetState.IsertTrack(playlist.title, true))
                 playlistInteractor.addTrackToPlaylist(track, playlist)
-                updateUiState(insertTrackState = InsertTrackState.IsertTrack(playlist.title, true))
+
 
             }
         }

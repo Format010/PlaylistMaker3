@@ -45,4 +45,21 @@ class PlaylistConverter {
 
         )
     }
+
+    fun mapEntityPlaylistToTrack(entities: List<TrackPlaylistEntity>): List<Track> {
+        return entities.map { entities -> Track(
+
+            entities.idTrack?: "",
+            entities.trackName?: "",
+            entities.artistName?: "",
+            entities.trackTime?: "",
+            entities.artwork?: "",
+            entities.collectionName?: "",
+            entities.releaseDate?: "",
+            entities.primaryGenreName?: "",
+            entities.country?: "",
+            entities.urlTrack?: "",
+
+            ) }
+    }
 }

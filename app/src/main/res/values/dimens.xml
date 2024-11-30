@@ -21,7 +21,10 @@
     <dimen name="set_textSize12">12sp</dimen>
     <dimen name="set_textSize13">13sp</dimen>
     <dimen name="set_textSize14">14sp</dimen>
+    <dimen name="set_textSize18">18sp</dimen>
     <dimen name="set_textSize22">22sp</dimen>
+    <dimen name="set_textSize24">24sp</dimen>
+    <dimen name="set_padding5">5dp</dimen>
     <dimen name="set_padding16">16dp</dimen>
     <dimen name="set_padding18">18dp</dimen>
     <dimen name="marginTop12">12dp</dimen>

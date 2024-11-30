@@ -27,6 +27,11 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlist_table WHERE playlistId = :playlistId")
     suspend fun getPlaylistById(playlistId: Int): PlaylistEntity
 
+
     @Query("UPDATE playlist_table SET trackId = :trackId, trackCount = :trackCount WHERE playlistId = :playlistId")
     suspend fun updateTrackId(playlistId: Int, trackId: String, trackCount: Int)
+
+    @Query("SELECT * FROM playlist_table WHERE trackId LIKE :trackId")
+    fun getAllPlaylistsByTrackId(trackId: String): Flow<List<PlaylistEntity>>
+
 }
