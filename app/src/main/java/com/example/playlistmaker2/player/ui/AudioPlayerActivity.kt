@@ -158,7 +158,7 @@ class AudioPlayerActivity() : AppCompatActivity(), audioPlayerToFragment  {
             else -> {}
         }
         when (uiState.insertTrackState){
-            is InsertTrackState.IsertTrack -> toast(uiState.insertTrackState.platListName, uiState.insertTrackState.result)
+            is BottomSheetState.IsertTrack -> toast(uiState.insertTrackState.platListName, uiState.insertTrackState.result)
             else -> return
         }
     }

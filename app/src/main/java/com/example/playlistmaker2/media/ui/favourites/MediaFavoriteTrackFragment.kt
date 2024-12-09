@@ -72,13 +72,15 @@ class MediaFavoriteTrackFragment: Fragment() {
     }
 
     private fun init() {
-        favouritesTrackAdapter = SearchAdapter(listSong){
+        favouritesTrackAdapter = SearchAdapter(listSong, { track ->
             if (clickDebounce()) {
                 val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
+                playerIntent.putExtra(AUDIO_PLAYER_DATA, track)
                 startActivity(playerIntent)
             }
-        }
+        }, {
+            //Длинное нажатие
+        })
     }
 
     private fun clickDebounce() : Boolean {

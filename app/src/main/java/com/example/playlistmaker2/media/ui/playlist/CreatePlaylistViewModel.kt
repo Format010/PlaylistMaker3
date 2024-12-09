@@ -1,5 +1,7 @@
 package com.example.playlistmaker2.media.ui.playlist
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker2.media.domain.PlaylistInteractor
@@ -8,7 +10,8 @@ import kotlinx.coroutines.launch
 
 class CreatePlaylistViewModel(val interactor: PlaylistInteractor): ViewModel() {
 
-    private val playlistsCoverPathList = mutableListOf<String>()
+    private val playlistsLiveData = MutableLiveData<Playlist>()
+    val playlistLive: LiveData<Playlist> = playlistsLiveData
 
     fun addNewPlaylistToDb(playlist: Playlist) {
         viewModelScope.launch {
@@ -16,14 +19,15 @@ class CreatePlaylistViewModel(val interactor: PlaylistInteractor): ViewModel() {
         }
     }
 
-    fun writeFileName(filePath: String) {
-        if (!playlistsCoverPathList.contains(filePath)) {
-            playlistsCoverPathList.add(filePath)
+    fun getDataPlaylist(plalistId: Int) {
+        viewModelScope.launch {
+            playlistsLiveData.value = interactor.getPLaylistById(plalistId)
         }
     }
 
-    fun getImagePath(): String? {
-        return playlistsCoverPathList.lastOrNull()
+    fun updatePlaylist(playlist: Playlist){
+        viewModelScope.launch {
+            interactor.update(playlist)
+        }
     }
-
 }

@@ -195,22 +195,28 @@ class SearchFragment : Fragment() {
     }
 
     private fun init() {
-        historyAdapter = SearchAdapter(viewModel.historyRead()){
+        historyAdapter = SearchAdapter(viewModel.historyRead(), { track ->
             if (clickDebounce()) {
                 val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
+                playerIntent.putExtra(AUDIO_PLAYER_DATA, track)
                 startActivity(playerIntent)
             }
-        }
+        }, {
+            //Длинное нажатие
+        })
 
-        songAdapter = SearchAdapter(listSong){
+
+
+        songAdapter = SearchAdapter(listSong, { track ->
             if (clickDebounce()) {
-                viewModel.historyAdd(viewModel.historyRead(), it)
+                viewModel.historyAdd(viewModel.historyRead(), track)
                 val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                playerIntent.putExtra(AUDIO_PLAYER_DATA, it)
+                playerIntent.putExtra(AUDIO_PLAYER_DATA, track)
                 startActivity(playerIntent)
             }
-        }
+        }, {
+            //Длинное нажатие
+        })
     }
 
     private fun render(state: SearchState) {

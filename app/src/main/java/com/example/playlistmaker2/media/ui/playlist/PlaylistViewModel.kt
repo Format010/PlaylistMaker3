@@ -20,9 +20,6 @@ class PlaylistViewModel(private val context: Context,
     private val stateLiveData = MutableLiveData<PlaylistState>()
     val stateLive: LiveData<PlaylistState> = stateLiveData
 
-    private val playlistsLiveData = MutableLiveData<List<Playlist>>()
-    val playlistLive: LiveData<List<Playlist>> = playlistsLiveData
-
     fun getPlaylists(){
         viewModelScope.launch {
             interactor.getAllPlaylists()
@@ -33,12 +30,12 @@ class PlaylistViewModel(private val context: Context,
         }
     }
 
-
     private fun showData(playlists: List<Playlist>){
         if (playlists.isEmpty()){
             render(PlaylistState.Empty(context.getString(R.string.empty_playlist)))
         }else{
             render(PlaylistState.Content(playlists))
+
         }
     }
 

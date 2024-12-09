@@ -9,12 +9,13 @@ import layout.SearchHolder
 
 class SearchAdapter(
     var data: List<Track>,
-    private val listenerItem: OnClickListenerItem
+    private val listenerItem: OnClickListenerItem,
+    private val longListenerItem: OnLongClickListener? = null
     ): RecyclerView.Adapter<SearchHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.search_item, parent, false)
-            return SearchHolder(view, listenerItem)
+            return SearchHolder(view, listenerItem, longListenerItem)
         }
 
         override fun getItemCount(): Int {
@@ -25,7 +26,12 @@ class SearchAdapter(
             holder.bind(data[position])
         }
 
+
         fun interface OnClickListenerItem {
             fun onItemClick(track: Track)
+        }
+
+        fun interface OnLongClickListener {
+            fun onLongItemClick(track: Track)
         }
     }

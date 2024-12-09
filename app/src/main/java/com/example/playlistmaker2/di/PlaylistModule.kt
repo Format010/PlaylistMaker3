@@ -10,6 +10,7 @@ import com.example.playlistmaker2.media.domain.PlaylistInteractor
 import com.example.playlistmaker2.media.domain.PlaylistRepository
 import com.example.playlistmaker2.media.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker2.media.ui.playlist.CreatePlaylistViewModel
+import com.example.playlistmaker2.media.ui.playlist.PlaylistScreenViewModel
 import com.example.playlistmaker2.media.ui.playlist.PlaylistViewModel
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
@@ -26,7 +27,6 @@ val playlistModule = module {
     }
     factory { PlaylistConverter() }
     factory { Gson() }
-
 
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(
@@ -47,6 +47,9 @@ val playlistModule = module {
     }
     viewModel {
         PlaylistViewModel(context = androidContext(), interactor = get())
+    }
+    viewModel {
+        PlaylistScreenViewModel(context = androidContext(), get(), get())
     }
 
 }
